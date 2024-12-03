@@ -17,8 +17,8 @@
     </header>
     <div class="content">
         <p>Transforme sua vida com nossos cursos. Matrículas abertas!</p>
-        <a href="login.html" class="btn">Login</a>
-        <a href="cadastrar.html" class="btn">Cadastre-se</a>
+        <a href="/login" class="btn">Login</a>
+        <a href="/cadastro" class="btn">Cadastre-se</a>
     </div>
 </body>
 </html>
