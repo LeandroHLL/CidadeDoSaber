@@ -1,24 +1,5 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Cidade do Saber - Bem-vindo</title>
-    <style>
-        body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
-        header { background: #4CAF50; color: white; text-align: center; padding: 10px 0; }
-        .content { padding: 20px; text-align: center; }
-        .btn { padding: 10px 20px; background: #4CAF50; color: white; text-decoration: none; border-radius: 5px; }
-    </style>
-</head>
-<body>
-    <header>
-        <h1>Bem-vindo à Cidade do Saber</h1>
-    </header>
-    <div class="content">
-        <p>Transforme sua vida com nossos cursos. Matrículas abertas!</p>
-        <a href="/login" class="btn">Login</a>
-        <a href="/cadastro" class="btn">Cadastre-se</a>
-    </div>
-</body>
-</html>
+<?php
+require_once '../config/database.php';
+
+// Carregar o sistema de rotas
+require_once '../app/routes.php';

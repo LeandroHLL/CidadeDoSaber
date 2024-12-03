@@ -1,13 +1,8 @@
 <?php include '../common/header.php'; ?>
-<div class="container">
-    <h1>Bem-vindo, <?php echo $alunoNome; ?>!</h1>
-    <p>Veja seus cursos e histórico abaixo:</p>
-    <!-- Lista de cursos -->
-    <?php foreach ($cursos as $curso): ?>
-        <div class="course">
-            <h3><?php echo $curso['nome']; ?></h3>
-            <p>Status: <?php echo $curso['status']; ?></p>
-        </div>
-    <?php endforeach; ?>
-</div>
+<h2>Bem-vindo, [Nome do Aluno]</h2>
+<p>Confira seus cursos:</p>
+<ul>
+    <li>Curso de Teatro - Status: Matriculado</li>
+    <li>Curso de Dança - Status: Em Análise</li>
+</ul>
 <?php include '../common/footer.php'; ?>
