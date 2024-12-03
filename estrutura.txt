@@ -1,0 +1,49 @@
+/projeto
+│
+├── /app
+│   ├── /controllers
+│   │   ├── AlunoController.php
+│   │   ├── AdminController.php
+│   │   └── CursoController.php
+│   │
+│   ├── /models
+│   │   ├── Aluno.php
+│   │   ├── Curso.php
+│   │   └── Matricula.php
+│   │
+│   ├── /views
+│       ├── /aluno
+│       │   ├── dashboard.php
+│       │   ├── historico.php
+│       │   ├── inscricao.php
+│       │   └── confirmacao.php
+│       │
+│       ├── /admin
+│       │   ├── gerenciar_cursos.php
+│       │   └── relatorios.php
+│       │
+│       ├── /auth
+│       │   ├── login.php
+│       │   └── cadastro.php
+│       │
+│       └── common
+│           ├── header.php
+│           ├── footer.php
+│           └── error404.php
+│
+├── /public
+│   ├── /css
+│   │   └── style.css
+│   │
+│   ├── /js
+│   │   └── scripts.js
+│   │
+│   ├── /images
+│   │   └── logo.png
+│   │
+│   └── index.php
+│
+├── /config
+│   └── database.php
+│
+└── composer.json
