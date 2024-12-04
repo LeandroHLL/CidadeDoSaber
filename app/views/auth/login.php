@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -7,6 +8,8 @@
   <link rel="stylesheet" href="../../../public/css/stylesign.css">
   <title>Login</title>
 </head>
+<?php include '../common/header.php'; ?>
+
 <body>
   <div class="main-login">
     <div class="left-login">
@@ -28,5 +31,7 @@
       </div>
     </div>
   </div>
+  <?php include '../common/footer.php'; ?>
 </body>
+
 </html>
