@@ -35,26 +35,6 @@
       </div>
     </div>
   </div>
-
-  <style>
-    .login-options {
-      margin-top: 10px;
-      text-align: center;
-    }
-
-    .login-options a {
-      display: block;
-      margin-top: 5px;
-      text-decoration: none;
-      color: #007BFF;
-      font-size: 14px;
-    }
-
-    .login-options a:hover {
-      text-decoration: underline;
-    }
-  </style>
-
 </body>
 
 </html>
