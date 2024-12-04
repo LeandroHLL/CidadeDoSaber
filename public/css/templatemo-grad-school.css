@@ -490,7 +490,7 @@ section.features .col-4 {
 /* Why Choosing Us */
 
 section.why-us {
-    background-image: url(../images/choosing-bg.jpg);
+    background-image: url(../img/images/choosing-bg.jpg);
     background-color: #172238;
     background-repeat: no-repeat;
     background-size: cover;
@@ -621,7 +621,7 @@ section.why-us {
 /* Coming Soon */
 
 section.coming-soon {
-    background-image: url(../images/coming-soon-bg.jpg);
+    background-image: url(../img/images/coming-soon-bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-color: #172238;
@@ -795,7 +795,7 @@ section.coming-soon form button {
 /* Courses */
 
 section.courses {
-    background-image: url(../images/choosing-bg.jpg);
+    background-image: url(../img/images/choosing-bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-color: #172238;
@@ -885,7 +885,7 @@ section.courses .owl-carousel button.active {
 /* Video */
 
 section.video {
-    background-image: url(../images/video-bg.jpg);
+    background-image: url(../img/images/video-bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-color: #172238;
@@ -1446,7 +1446,7 @@ img.mfp-img {
 /* Contact */
 
 section.contact {
-    background-image: url(../images/contact-bg.jpg);
+    background-image: url(../img/images/contact-bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-color: #172238;

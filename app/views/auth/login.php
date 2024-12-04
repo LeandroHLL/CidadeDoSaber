@@ -28,10 +28,31 @@
           <input type="password" name="password" placeholder="Senha">
         </div>
         <button class="btn-login">Login</button>
+        <div class="login-options">
+          <a href="forgot-password.php" class="forgot-password-link">Esqueceu a senha?</a>
+          <a href="cadastro.php" class="register-link">Cadastre-se</a>
+        </div>
       </div>
     </div>
   </div>
-  <?php include '../common/footer.php'; ?>
+
+  <style>
+    .login-options {
+      margin-top: 10px;
+      text-align: center;
+    }
+    .login-options a {
+      display: block;
+      margin-top: 5px;
+      text-decoration: none;
+      color: #007BFF;
+      font-size: 14px;
+    }
+    .login-options a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
 </body>
 
 </html>
