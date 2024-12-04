@@ -12,7 +12,7 @@ body * {
 .main-login {
   width: 100vw;
   height: 100vh;
-  background: #201b2c;
+  background: #152036;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -28,7 +28,7 @@ body * {
 }
 
 .left-login > h1 {
-  color: #77ffc0;
+  color: #F29829;
   font-size: 2.5vw;
 }
 
@@ -51,13 +51,13 @@ body * {
   align-items: center;
   flex-direction: column;
   padding: 30px 35px;
-  background: #2f2841;
+  background: #151636;
   border-radius: 20px;
   box-shadow: 0px 10px 40px #00000056;
 }
 
 .card-login > h1 {
-  color: #00ff88;
+  color: #F29829;
   font-weight: 800;
   margin: 0;
 }
@@ -104,7 +104,7 @@ body * {
   font-weight: 800;
   letter-spacing: 3px;
   color: #2b134b;
-  background: #00ff88;
+  background: #F29829;
   cursor: pointer;
   box-shadow: 0px 10px 40px -12px #00ff8052;
 }
