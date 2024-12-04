@@ -12,10 +12,6 @@
 
 <body>
     <div class="main-login">
-        <div class="left-login">
-            <h1>Cadastre-se<br>E faça parte do nosso time</h1>
-            <img src="../../../public/img/person-working.svg" class="left-login-image" alt="Pessoa trabalhando">
-        </div>
         <div class="right-login">
             <div class="card-login">
                 <h1>Cadastro</h1>

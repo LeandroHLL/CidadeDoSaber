@@ -12,10 +12,7 @@
 
 <body>
   <div class="main-login">
-    <div class="left-login">
-      <h1>Faça login<br>E entre para o nosso time</h1>
-      <img src="../../../public/img/person-working.svg" class="left-login-image" alt="Pessoa trabalhando">
-    </div>
+
     <div class="right-login">
       <div class="card-login">
         <h1>LOGIN</h1>
