@@ -12,19 +12,10 @@
 
   <title>EducaNet | Home</title>
 
-  <!-- Bootstrap core CSS -->
-  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-
-  <!-- Additional CSS Files -->
-  <link rel="stylesheet" href="assets/css/fontawesome.css">
   <link rel="stylesheet" href="../../../public/css/templatemo-grad-school.css">
-  <link rel="stylesheet" href="assets/css/owl.css">
-  <link rel="stylesheet" href="assets/css/lightbox.css">
-
 </head>
 
 <body>
-
 
   <!--header-->
   <header class="main-header clearfix" role="header">
