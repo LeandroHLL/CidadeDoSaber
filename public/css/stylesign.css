@@ -27,7 +27,7 @@ body * {
   flex-direction: column;
 }
 
-.left-login > h1 {
+.left-login>h1 {
   color: #F29829;
   font-size: 2.5vw;
 }
@@ -56,7 +56,7 @@ body * {
   box-shadow: 0px 10px 40px #00000056;
 }
 
-.card-login > h1 {
+.card-login>h1 {
   color: #F29829;
   font-weight: 800;
   margin: 0;
@@ -71,7 +71,7 @@ body * {
   margin: 10px 0px;
 }
 
-.textfield > input {
+.textfield>input {
   width: 100%;
   border: none;
   border-radius: 10px;
@@ -84,12 +84,12 @@ body * {
   box-sizing: border-box;
 }
 
-.textfield > label {
+.textfield>label {
   color: #f0ffffde;
   margin-bottom: 10px;
 }
 
-.textfield > input::placeholder {
+.textfield>input::placeholder {
   color: #f0ffff94;
 }
 
@@ -109,18 +109,18 @@ body * {
   box-shadow: 0px 10px 40px -12px #00ff8052;
 }
 
-@media only screen and (max-width: 950px){
-  .card-login{
+@media only screen and (max-width: 950px) {
+  .card-login {
     width: 85%;
   }
 }
 
-@media only screen and (max-width: 600px){
-  .main-login{
+@media only screen and (max-width: 600px) {
+  .main-login {
     flex-direction: column;
   }
 
-  .left-login > h1 {
+  .left-login>h1 {
     display: none;
   }
 
@@ -141,6 +141,7 @@ body * {
   .card-login {
     width: 90%;
   }
+
   .main-header {
     background-color: rgba(22, 34, 57, 0.95);
     height: 80px;
@@ -148,5 +149,6 @@ body * {
     z-index: 12;
     width: 100%;
     top: 0;
-}
+  }
+  
 }

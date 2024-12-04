@@ -41,6 +41,7 @@
       margin-top: 10px;
       text-align: center;
     }
+
     .login-options a {
       display: block;
       margin-top: 5px;
@@ -48,6 +49,7 @@
       color: #007BFF;
       font-size: 14px;
     }
+
     .login-options a:hover {
       text-decoration: underline;
     }
