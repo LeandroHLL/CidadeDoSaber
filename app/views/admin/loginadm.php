@@ -14,7 +14,7 @@
         <!-- Formulário de login -->
         <form method="POST" action="../../controllers/UsuarioController.php" class="form login">
             <!-- Mensagem de erro -->
-            <?php 
+            <?php
             session_start();
             if (isset($_SESSION['error'])): ?>
                 <div class="error-message">
