@@ -3,7 +3,7 @@
 // Define the autoloader function
 function my_autoloader($class) {
     
-    $baseNamespace = 'core\\model\\class';  // The namespace prefix
+    $baseNamespace = 'app\\models\\class';  // The namespace prefix
  
     if (strpos($class, $baseNamespace) === 0) {
         
@@ -11,13 +11,13 @@ function my_autoloader($class) {
 
         $relativeClass = str_replace('\\', '/', $relativeClass);
 
-        $classFile = __DIR__ . '/core/model/class/' . $relativeClass . '.class.php';  // Assuming classes are inside the 'src' directory
+        $classFile = __DIR__ . '/app/models/class/' . $relativeClass . '.class.php';  // Assuming classes are inside the 'src' directory
 
         if (file_exists($classFile)) {
             require_once $classFile;
         }
     }
-    $baseNamespace = 'core\\controler\\class';
+    $baseNamespace = 'app\\controllers\\class';
     
     if (strpos($class, $baseNamespace) === 0) {
         
@@ -25,7 +25,7 @@ function my_autoloader($class) {
         
         $relativeClass = str_replace('\\', '/', $relativeClass);
        
-        $classFile = __DIR__ . '/core/controler/class/' . $relativeClass . '.class.php'; 
+        $classFile = __DIR__ . '/app/controllers/class/' . $relativeClass . '.class.php'; 
 
         if (file_exists($classFile)) {
             require_once $classFile;  
