@@ -39,7 +39,7 @@ include '../common/header.php';
           <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
 
-        <form method="POST" action="../../controllers/AlunoController.php">
+        <form method="POST" action="../../controllers/loginAluno.php">
           <div class="textfield">
             <label for="usuario">Usuário</label>
             <input type="text" name="usuario" placeholder="Usuário" required>

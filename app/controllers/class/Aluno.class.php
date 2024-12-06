@@ -71,11 +71,11 @@ class Aluno extends \app\models\class\Aluno{
     }
 
     // Função para processar o login
-    public function login($username, $password)
-    {
-        try {
+    public function loginC($username, $password)
+    {       
+            //echo "Memória inicial: " . memory_get_usage() . " bytes\n";
             $aluno = $this->login($username, $password);
-
+            
             if ($aluno) {
                 $_SESSION['user'] = $aluno;
                 header("Location:./app/views/aluno/dashboard.php");
@@ -85,9 +85,6 @@ class Aluno extends \app\models\class\Aluno{
                 header("Location:./views/auth/login.php");
                 exit();
             }
-        } catch (Exception $e) {
-            die("Erro no login: " . $e->getMessage());
-        }
     }
 }
 
