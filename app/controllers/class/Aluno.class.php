@@ -71,20 +71,25 @@ class Aluno extends \app\models\class\Aluno{
     }
 
     // Função para processar o login
-    public function loginC($username, $password)
+    public function loginC($nome, $senha)
     {       
             //echo "Memória inicial: " . memory_get_usage() . " bytes\n";
-            $aluno = $this->login($username, $password);
+            $aluno = $this->login($nome, $senha);
             
             if ($aluno) {
                 $_SESSION['user'] = $aluno;
-                header("Location:./app/views/aluno/dashboard.php");
+                header("Location:../views/aluno/dashboard.php");
                 exit();
             } else {
                 $_SESSION['error'] = "Usuário ou senha incorretos!";
-                header("Location:./views/auth/login.php");
+                header("Location: ../views/auth/login.php");
                 exit();
             }
+    }
+
+    public function cadastrarC($nome, $senha, $nomeDeUsuario, $email, $confirmaSenha){
+        
+
     }
 }
 

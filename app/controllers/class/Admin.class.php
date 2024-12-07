@@ -16,7 +16,7 @@ class Admin extends \app\models\class\Admin{
         return $admin;
     }
 
-    public function login($nome_usuario, $senha)
+    public function Clogin($nome_usuario, $senha)
     {
 
         if($administrador = $this->login($nome_usuario, $senha)){

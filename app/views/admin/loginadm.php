@@ -12,7 +12,7 @@
 
     <div class="grid">
         <!-- Formulário de login -->
-        <form method="POST" action="../../controllers/UsuarioController.php" class="form login">
+        <form method="POST" action="../../controllers/adminLogin.php" class="form login">
             <!-- Mensagem de erro -->
             <?php
             session_start();

@@ -11,7 +11,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $aluno->loginC($username, $password);
     } else {
         $_SESSION['error'] = "Por favor, preencha todos os campos!";
-        header("Location: ../views/auth/logen.php");
+        header("Location: ../views/auth/login.php");
         exit();
     }
 }

@@ -15,7 +15,7 @@
         <div class="right-login">
             <div class="card-login">
                 <h1>Cadastro</h1>
-                <form action="processar-cadastro.php" method="POST">
+                <form action="../../controllers/cadastroAluno.php" method="POST">
                     <div class="textfield">
                         <label for="nome">Nome Completo</label>
                         <input type="text" name="nome" placeholder="Digite seu nome" required>

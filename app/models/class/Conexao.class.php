@@ -3,11 +3,11 @@
 namespace app\models\class;
 
  class Conexao {
-    private $connection;
+    public $connection;
     private static $instance = null;
     private const HOST = 'localhost';
     private const USER = 'root';
-    private const PASSWORD = '123456cds';
+    private const PASSWORD = '';
     private const DBNAME = 'educanet';
 
     // Construtor privado para evitar instância diretamente
@@ -42,24 +42,5 @@ namespace app\models\class;
             self::$instance->connection->close();
             self::$instance = null;
         }
-    }
-
-    public static function selection_query($table,array $column){
-        $instance = self::$instance;
-        $query = "SELECT * FROM $table WHERE ";
-        $result = $instance->connection->prepery($query);
-        return $result;
-    }
-
-    public static function fetch($query){
-        $result = self::query($query);
-        $data = [];
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $data[] = $row;
-            }
-            return $data;
-        }
-
-    }
+    }       
 }
