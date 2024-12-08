@@ -18,6 +18,16 @@
       margin-bottom: 15px;
       font-size: 14px;
     }
+      .success-message {
+      color: white;
+      background-color: #01c929 ;
+      /* verde */
+      padding: 10px;
+      border-radius: 5px;
+      text-align: center;
+      margin-bottom: 15px;
+      font-size: 14px;
+    }
   </style>
 </head>
 <?php
@@ -37,6 +47,13 @@ include '../common/header.php';
             <?php echo $_SESSION['error']; ?>
           </div>
           <?php unset($_SESSION['error']); ?>
+        <?php endif; ?>
+        <!-- Exibição de mensagem de sucesso -->
+        <?php if (isset($_SESSION['success'])): ?>
+          <div class="success-message">
+            <?php echo $_SESSION['success']; ?>
+          </div>
+          <?php unset($_SESSION['success']); ?>
         <?php endif; ?>
 
         <form method="POST" action="../../controllers/loginAluno.php">

@@ -28,7 +28,7 @@ class Aluno extends \app\models\class\Aluno{
     private $bolsaFamalia;
     private $rendaFamiliar;
 
-    public function cadastrar($nome, $dataDeNsacimento, $pai, $mae, $sexo, $rg, $cpf, $telefoneResidencial,
+    public function inscrever($nome, $dataDeNsacimento, $pai, $mae, $sexo, $rg, $cpf, $telefoneResidencial,
     $telefonePrivado, $email, $tipoSangue, $estadoCivil, $serie, $codEscolar, $escolariedade, $tamanhaRoupa, $tamanhoCalcado, $endereco, $bairro, $alergia, $medicacao, $bolsaFamalia, $rendaFamiliar) {
         
         if($bolsaFamalia === null){
@@ -87,9 +87,25 @@ class Aluno extends \app\models\class\Aluno{
             }
     }
 
-    public function cadastrarC($nome, $senha, $nomeDeUsuario, $email, $confirmaSenha){
+    public function cadastrarC($nome, $senha, $email, $numero){
         
-
+        if (is_string($nome) && is_string($senha) && is_string($email) && is_string($numero)){
+            if($this->cadastrar($nome, $senha, $email, $numero)){
+                
+                $_SESSION['success'] = "Cadastro realizado com sucesso!";
+                unset($_SESSION['error']);
+                header("Location:../views/auth/login.php");
+                exit();
+            }else{
+                $_SESSION['error'] = "email invalido!";
+                header("Location:../views/auth/cadastro.php");
+                exit();
+            } 
+        }else{
+            $_SESSION['error'] = "Por favor, preencha todos os campos corretamente!";
+            header("Location:../views/auth/cadastro.php");
+            exit();
+        }
     }
 }
 
