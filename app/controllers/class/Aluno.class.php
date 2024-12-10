@@ -67,7 +67,38 @@ class Aluno extends \app\models\class\Aluno{
         $this->bolsaFamalia = $bolsaFamalia;
         $this->alergia = $alergia;
         $this->medicacao = $medicacao;
+
+
         
+    }
+
+    public function get_aluno(){
+        
+        $aluno = [];
+        $aluno['nome'] = $this->nome;
+        $aluno['dataDeNsacimento'] = $this->dataDeNsacimento;
+        $aluno['pai'] = $this->pai;
+        $aluno['mae'] = $this->mae;
+        $aluno['sexo'] = $this->sexo;
+        $aluno['rg'] = $this->rg;
+        $aluno['cpf'] = $this->cpf;
+        $aluno['telefoneResidencial'] = $this->telefoneResidencial;
+        $aluno['telefonePrivado'] = $this->telefonePrivado;
+        $aluno['email'] = $this->email;
+        $aluno['tipoSangue'] = $this->tipoSangue;
+        $aluno['estadoCivil'] = $this->estadoCivil;
+        $aluno['serie'] = $this->serie;
+        $aluno['codEscolar'] = $this->codEscolar;
+        $aluno['escolariedade'] = $this->escolariedade;
+        $aluno['tamanhaRoupa'] = $this->tamanhaRoupa;
+        $aluno['tamanhoCalcado'] = $this->tamanhoCalcado;
+        $aluno['endereco'] = $this->endereco;
+        $aluno['bairro'] = $this->bairro;
+        $aluno['rendaFamiliar'] = $this->rendaFamiliar; 
+        $aluno['bolsaFamalia'] = $this->bolsaFamalia;
+        $aluno['alergia'] = $this->alergia;
+        $aluno['medicacao'] = $this->medicacao;
+        return $aluno;
     }
 
     // Função para processar o login
