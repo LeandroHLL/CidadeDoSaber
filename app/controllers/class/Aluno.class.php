@@ -17,7 +17,8 @@ class Aluno extends \app\models\class\Aluno{
     private $tipoSangue;
     private $estadoCivil;
     private $serie;
-    private $codEscolar;
+    private $turnoEscolar;
+    private $codEscola;
     private $escolariedade;
     private $tamanhaRoupa;
     private $tamanhoCalcado;
@@ -25,11 +26,12 @@ class Aluno extends \app\models\class\Aluno{
     private $bairro;
     private $alergia;
     private $medicacao;
+    private $PNE;
     private $bolsaFamalia;
     private $rendaFamiliar;
 
     public function inscrever($nome, $dataDeNsacimento, $pai, $mae, $sexo, $rg, $cpf, $telefoneResidencial,
-    $telefonePrivado, $email, $tipoSangue, $estadoCivil, $serie, $codEscolar, $escolariedade, $tamanhaRoupa, $tamanhoCalcado, $endereco, $bairro, $alergia, $medicacao, $bolsaFamalia, $rendaFamiliar) {
+    $telefonePrivado, $email, $tipoSangue, $estadoCivil, $serie, $turnoEscolar, $codEscola, $escolariedade, $tamanhaRoupa, $tamanhoCalcado, $endereco, $bairro, $alergia, $medicacao, $bolsaFamalia, $rendaFamiliar,$PNE) {
         
         if($bolsaFamalia === null){
             $bolsaFamalia = "não possui";
@@ -57,7 +59,8 @@ class Aluno extends \app\models\class\Aluno{
         $this->tipoSangue = $tipoSangue;
         $this->estadoCivil = $estadoCivil;
         $this->serie = $serie;
-        $this->codEscolar = $codEscolar;
+        $this->turnoEscolar = $turnoEscolar;
+        $this->codEscola = $codEscola;
         $this->escolariedade = $escolariedade;
         $this->tamanhaRoupa = $tamanhaRoupa;
         $this->tamanhoCalcado = $tamanhoCalcado;
@@ -67,6 +70,7 @@ class Aluno extends \app\models\class\Aluno{
         $this->bolsaFamalia = $bolsaFamalia;
         $this->alergia = $alergia;
         $this->medicacao = $medicacao;
+        $this->PNE;
 
 
         
@@ -88,7 +92,8 @@ class Aluno extends \app\models\class\Aluno{
         $aluno['tipoSangue'] = $this->tipoSangue;
         $aluno['estadoCivil'] = $this->estadoCivil;
         $aluno['serie'] = $this->serie;
-        $aluno['codEscolar'] = $this->codEscolar;
+        $aluno['turnoEscolar'] = $this->turnoEscolar;
+        $aluno['codEscola'] = $this->codEscola;
         $aluno['escolariedade'] = $this->escolariedade;
         $aluno['tamanhaRoupa'] = $this->tamanhaRoupa;
         $aluno['tamanhoCalcado'] = $this->tamanhoCalcado;
@@ -98,6 +103,7 @@ class Aluno extends \app\models\class\Aluno{
         $aluno['bolsaFamalia'] = $this->bolsaFamalia;
         $aluno['alergia'] = $this->alergia;
         $aluno['medicacao'] = $this->medicacao;
+        $aluno['PNE'] = $this->PNE;
         return $aluno;
     }
 

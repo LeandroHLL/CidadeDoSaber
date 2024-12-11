@@ -59,57 +59,54 @@ class Aluno{
         $tipoSangue = $data['tipoSangue'];
         $estadoCivil = $data['estadoCivil'];
         $serie = $data['serie'];
-        $codEscolar = $data['codEscolar'];//int
+        $turnoEscolar = $data['turnoEscolar'];
+        $codEscola = $data['codEscola'];//int
         $escolariedade = $data['escolariedade'];
         $tamanhoRoupa = $data['tamanhaRoupa'];
-        $tamanhaCalcado = $data['tamanhoCalcado'];
+        $tamanhoCalcado = $data['tamanhoCalcado'];
         $endereco = $data['endereco'];
         $bairro = $data['bairro'];
         $rendaFamiliar = $data['rendaFamiliar'];
         $bolsaFamilia = $data['bolsaFamalia'];
         $alergia = $data['alergia'];
         $medicacao = $data['medicacao'];
-        $query = "SELECT * FROM aluno WHERE cod_bairro = and 
-        cod_escola = and 
-        cod_escolaridade = and 
-        nome_aluno = and 
-        data_nascimento = and 
-        data_cadastro = and 
-        nome_pai = and 
-        nome_mae = and 
-        sexo = and 
-        rg = and 
-        cpf = and 
-        telefone_residencial = and 
-        telefone_celular = and 
-        email = and 
-        tipo_sanguineo = and 
-        estado_civil = and 
-        serie_escolar = and 
-        turno_escolar = and 
-        manequim = and 
-        numero_calcado = and 
-        endereco =  and 
-        numero_endereco =  and 
-        possui_alergia = and 
-        qual_alergia =  and 
-        portador_pne = and 
-        qual_pne =  and 
-        medicao_controlada = and 
-        qual_medicao = and 
-        possui_bolsa_familia = and 
-        numero_bolsa_familia = and 
-        numero_cnis = and 
-        renda_familiar =  and 
-        ex_aluno = and 
-        seduc = and 
-        qual_curso_fez =  and 
-        obs =  and 
-        nome_civil = and 
-        responsavel_rg = and 
-        responsavel_cpf = and 
-        id_cad =";
+        $PNE = $data['PNE'];
+        
+        
+        $query = "SELECT * FROM aluno WHERE rg = ? or cpf = ?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
+        $stmt->bind_param('ss', $rg, $cpf);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result->num_rows > 0){
+
+            $row = $result->fetch_assoc();
+            if($row['ex_aluno'] !== null){
+                
+                $query = "UPDATE aluno SET endereco = ?, bairro = ?, estadoCivil = ?, email = ?,  telprivado = ?, tamanhoRoupa = ?, tamanhoCalcado = ?, serie = ?, cod_escola = ?, cod_escolariedade = ? WHERE cpf =? and rg =?";
+                $stmt->prepare($query);
+                $stmt->bind_param('sissssssiiss', $endereco, $bairro, $estadoCivil, $email, $telPrivado, $tamanhoRoupa, $tamanhoCalcado, $serie, $codEscola, $escolariedade, $cpf, $rg);
+                $stmt->execute();
+                Conexao::closeInstance();
+                return "atualiza";
+            }else{
+                Conexao::closeInstance();
+                return "existe";
+            }
+        }else{
+
+            $query = "INSERT INTO aluno ( `cod_bairro`, `cod_escola`, `cod_escolaridade`, `nome_aluno`, `data_nascimento`,`nome_pai`, `nome_mae`, `sexo`, `rg`,
+            `cpf`, `telefone_residencial`, `telefone_celular`, `email`, `tipo_sanguineo`, `estado_civil`, `serie_escolar`, `turno_escolar`, `manequim`, `numero_calcado`, `endereco`,
+            `numero_endereco`, `possui_alergia`, `portador_pne`, `medicao_controlada`,`possui_bolsa_familia`,`renda_familiar`,'inscricao') 
+            VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?','?')";
+            $stmt->prepare($query);
+            $stmt->bind_param("iiissssssssssssssssssssssssss", $bairro, $codEscola,$escolariedade,$nome,$dataDeNascimento,$pai,$mae,$sexo,$rg,$cpf,$tel,$telPrivado,
+            $email, $tipoSangue,$estadoCivil,$serie,$turnoEscolar,$tamanhoRoupa,$tamanhoCalcado,$endereco,$alergia,$PNE,$medicacao,$bolsaFamilia,$rendaFamiliar,$inscricao);
+            $stmt->execute();
+            Conexao::closeInstance();
+            return true;
+        }
+
     }
 }
 
