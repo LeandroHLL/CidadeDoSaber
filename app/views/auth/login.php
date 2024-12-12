@@ -18,9 +18,10 @@
       margin-bottom: 15px;
       font-size: 14px;
     }
-      .success-message {
+
+    .success-message {
       color: white;
-      background-color: #01c929 ;
+      background-color: #01c929;
       /* verde */
       padding: 10px;
       border-radius: 5px;
@@ -58,8 +59,8 @@ include '../common/header.php';
 
         <form method="POST" action="../../controllers/loginAluno.php">
           <div class="textfield">
-            <label for="usuario">Usuário</label>
-            <input type="text" name="usuario" placeholder="Usuário" required>
+            <label for="email">Email do Usuário</label>
+            <input type="email" name="email" placeholder="Digite seu e-mail" required>
           </div>
           <div class="textfield">
             <label for="password">Senha</label>
