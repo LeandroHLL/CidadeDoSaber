@@ -30,20 +30,21 @@ class Aluno extends \app\models\class\Aluno{
     private $bolsaFamalia;
     private $rendaFamiliar;
 
-    public function inscrever($nome, $dataDeNsacimento, $pai, $mae, $sexo, $rg, $cpf, $telefoneResidencial,
-    $telefonePrivado, $email, $tipoSangue, $estadoCivil, $serie, $turnoEscolar, $codEscola, $escolariedade, $tamanhaRoupa, $tamanhoCalcado, $endereco, $bairro, $alergia, $medicacao, $bolsaFamalia, $rendaFamiliar,$PNE) {
+    public function set($nome, $dataDeNsacimento, $pai, $mae, $sexo, $rg, $cpf, $telefoneResidencial,
+    $telefonePrivado, $email, $tipoSangue, $estadoCivil, $serie, $turnoEscolar, $codEscola, $escolariedade,
+     $tamanhaRoupa, $tamanhoCalcado, $endereco, $bairro, $alergia, $medicacao, $bolsaFamalia, $rendaFamiliar,$PNE) {
         
         if($bolsaFamalia === null){
-            $bolsaFamalia = "não possui";
-            $this->bolsaFamalia = $bolsaFamalia;
+            $bolsaFamalia = "não possui";    
         }
         if($alergia === null){
-            $alergia = "não possui";
-            $this->alergia = $alergia;
+            $alergia = "não possui";         
         }
         if($medicacao === null){
-            $medicacao = "não possui";
-            $this->medicacao = $medicacao;
+            $medicacao = "não possui";    
+        }
+        if($PNE === null){
+            $PNE = "nao possui";
         }
         
         $this->nome = $nome;
@@ -70,7 +71,7 @@ class Aluno extends \app\models\class\Aluno{
         $this->bolsaFamalia = $bolsaFamalia;
         $this->alergia = $alergia;
         $this->medicacao = $medicacao;
-        $this->PNE;
+        $this->PNE = $PNE;
 
 
         
@@ -143,6 +144,38 @@ class Aluno extends \app\models\class\Aluno{
             header("Location:../views/auth/cadastro.php");
             exit();
         }
+    }
+    
+    public function inscreverC(){   
+
+        if($this->inscreverM($this)){
+
+            $_SESSION['success'] = "Inscrição realizada com sucesso!";
+            unset($_SESSION['error']);
+            header("Location:../views/aluno/dashboard.php");
+            exit();
+        
+        }elseif($this->inscreverM($this) === 'atualiza'){
+            
+            $_SESSION['success'] = "Sua inscrição foi atualizada com sucesso!";
+            unset($_SESSION['error']);
+            header("Location:../views/aluno/dashboard.php");
+            exit();
+
+        }elseif($this->inscreverM($this) === 'existe'){
+            
+            $_SESSION['error'] = "Você já está inscrito nesta turma!";
+            header("Location:../views/aluno/dashboard.php");
+            exit();
+
+        }else{
+            
+            $_SESSION['error'] = "Houve um erro ao tentar inscrever você nesta turma!";
+            header("Location:../views/aluno/dashboard.php");
+            exit();
+
+        }
+
     }
 }
 

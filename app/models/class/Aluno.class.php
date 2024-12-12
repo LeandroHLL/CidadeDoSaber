@@ -3,11 +3,12 @@
 namespace app\models\class;
 
 class Aluno{
-
-    protected function login($email, $password){
-        $query = "SELECT * FROM cadastro WHERE email = ? and password = ?";
+    
+    
+     protected function login($username, $password){
+        $query = "SELECT * FROM cadastro WHERE username = ? and password = ?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
-        $stmt->bind_param('ss', $email, $password);
+        $stmt->bind_param('ss', $username, $password);
         $stmt->execute();
         $result = $stmt->get_result();
         if($result->num_rows > 0){
@@ -21,6 +22,7 @@ class Aluno{
     }
 
     protected function cadastrar($nome, $senha, $email, $numero){
+        
         $query = "SELECT * FROM cadastro WHERE email = ?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
         $stmt->bind_param('s', $email);
@@ -41,10 +43,11 @@ class Aluno{
         }
     }
 
-    protected function inscreverm(\app\controllers\class\aluno $aluno){
+    protected function inscreverM(\app\controllers\class\aluno $aluno){
+        
         $data = $aluno->get_aluno();
-        $nome = $data['nome'];
-        $dataDeNascimento= $data['dataDeNsacimento'];
+        $nome = $data['nome'];//var
+        $dataDeNascimento= $data['dataDeNsacimento'];//
         $pai = $data['pai'];
         $mae = $data['mae'];
         $sexo = $data['sexo'];
@@ -57,7 +60,7 @@ class Aluno{
         $estadoCivil = $data['estadoCivil'];
         $serie = $data['serie'];
         $turnoEscolar = $data['turnoEscolar'];
-        $codEscola = $data['codEscola'];
+        $codEscola = $data['codEscola'];//int
         $escolariedade = $data['escolariedade'];
         $tamanhoRoupa = $data['tamanhaRoupa'];
         $tamanhoCalcado = $data['tamanhoCalcado'];
@@ -68,15 +71,18 @@ class Aluno{
         $alergia = $data['alergia'];
         $medicacao = $data['medicacao'];
         $PNE = $data['PNE'];
-
+        
+        
         $query = "SELECT * FROM aluno WHERE rg = ? or cpf = ?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
         $stmt->bind_param('ss', $rg, $cpf);
         $stmt->execute();
         $result = $stmt->get_result();
         if($result->num_rows > 0){
+
             $row = $result->fetch_assoc();
             if($row['ex_aluno'] !== null){
+                
                 $query = "UPDATE aluno SET endereco = ?, bairro = ?, estadoCivil = ?, email = ?,  telprivado = ?, tamanhoRoupa = ?, tamanhoCalcado = ?, serie = ?, cod_escola = ?, cod_escolariedade = ? WHERE cpf =? and rg =?";
                 $stmt->prepare($query);
                 $stmt->bind_param('sissssssiiss', $endereco, $bairro, $estadoCivil, $email, $telPrivado, $tamanhoRoupa, $tamanhoCalcado, $serie, $codEscola, $escolariedade, $cpf, $rg);
@@ -88,6 +94,8 @@ class Aluno{
                 return "existe";
             }
         }else{
+
+            $inscricao = false;
             $query = "INSERT INTO aluno ( `cod_bairro`, `cod_escola`, `cod_escolaridade`, `nome_aluno`, `data_nascimento`,`nome_pai`, `nome_mae`, `sexo`, `rg`,
             `cpf`, `telefone_residencial`, `telefone_celular`, `email`, `tipo_sanguineo`, `estado_civil`, `serie_escolar`, `turno_escolar`, `manequim`, `numero_calcado`, `endereco`,
             `numero_endereco`, `possui_alergia`, `portador_pne`, `medicao_controlada`,`possui_bolsa_familia`,`renda_familiar`,'inscricao') 
@@ -99,5 +107,30 @@ class Aluno{
             Conexao::closeInstance();
             return true;
         }
+
+    }
+
+    protected function comfirmarInscricao($cpf,$rg){
+        
+        $query = "SELECT * FROM aluno WHERE cpf =? and rg =?";
+        $stmt = Conexao::openInstance()->connection->prepare($query);
+        $stmt->bind_param('ss', $cpf, $rg);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        if($result->num_rows > 0){
+            $query = "UPDATE aluno SET inscricao = true WHERE cpf =? and rg =?";
+            $stmt->prepare($query);
+            $stmt->bind_param('ss', $cpf, $rg);
+            $stmt->execute();
+            Conexao::closeInstance();
+            return true;
+        }else{
+            Conexao::closeInstance();
+            return false;
+        }
     }
 }
+
+
+
+    
