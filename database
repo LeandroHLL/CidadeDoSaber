@@ -1,1 +1,475 @@
 
+-- MySQL Workbench Forward Engineering
+
+SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
+SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
+SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
+
+-- -----------------------------------------------------
+-- Schema mydb
+-- -----------------------------------------------------
+-- -----------------------------------------------------
+-- Schema educanet
+-- -----------------------------------------------------
+
+-- -----------------------------------------------------
+-- Schema educanet
+-- -----------------------------------------------------
+CREATE SCHEMA IF NOT EXISTS `educanet` DEFAULT CHARACTER SET utf8mb4 ;
+USE `educanet` ;
+
+-- -----------------------------------------------------
+-- Table `educanet`.`alergia`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`alergia` (
+  `cod_alergia` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_alergia` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_alergia`),
+  UNIQUE INDEX `nome_alergia` (`nome_alergia` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`bairro`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`bairro` (
+  `cod_bairro` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_bairro` VARCHAR(50) NULL DEFAULT NULL,
+  `localidade` VARCHAR(4) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_bairro`),
+  UNIQUE INDEX `nome_bairro` (`nome_bairro` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`escolaridade`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`escolaridade` (
+  `cod_escolaridade` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_escolaridade` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_escolaridade`),
+  UNIQUE INDEX `nome_escolaridade` (`nome_escolaridade` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`escola`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`escola` (
+  `cod_escola` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_escola` VARCHAR(50) NULL DEFAULT NULL,
+  `rede` VARCHAR(10) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_escola`),
+  UNIQUE INDEX `nome_escola` (`nome_escola` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`cadastro`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`cadastro` (
+  `id` INT(11) NOT NULL AUTO_INCREMENT,
+  `username` VARCHAR(50) NOT NULL,
+  `password` VARCHAR(50) NOT NULL,
+  `email` VARCHAR(100) NOT NULL,
+  `age` INT(11) NOT NULL,
+  `phone_number` VARCHAR(20) NOT NULL,
+  `created_at` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP(),
+  `autenticacao` VARCHAR(20) NULL DEFAULT NULL,
+  `security_answer` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE INDEX `email` (`email` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2
+DEFAULT CHARACTER SET = utf8mb4;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`aluno`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`aluno` (
+  `cod_aluno` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_bairro` INT(11) NULL DEFAULT NULL,
+  `cod_escola` INT(11) NULL DEFAULT NULL,
+  `cod_escolaridade` INT(11) NULL DEFAULT NULL,
+  `nome_aluno` VARCHAR(50) NULL DEFAULT NULL,
+  `data_nascimento` DATE NULL DEFAULT NULL,
+  `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+  `nome_pai` VARCHAR(50) NULL DEFAULT NULL,
+  `nome_mae` VARCHAR(50) NULL DEFAULT NULL,
+  `sexo` VARCHAR(15) NULL DEFAULT NULL,
+  `rg` VARCHAR(15) NULL DEFAULT NULL,
+  `cpf` VARCHAR(20) NULL DEFAULT NULL,
+  `telefone_residencial` VARCHAR(20) NULL DEFAULT NULL,
+  `telefone_celular` VARCHAR(20) NULL DEFAULT NULL,
+  `email` VARCHAR(50) NULL DEFAULT NULL,
+  `tipo_sanguineo` VARCHAR(15) NULL DEFAULT NULL,
+  `estado_civil` VARCHAR(15) NULL DEFAULT NULL,
+  `serie_escolar` VARCHAR(15) NULL DEFAULT NULL,
+  `turno_escolar` VARCHAR(15) NULL DEFAULT NULL,
+  `manequim` VARCHAR(2) NULL DEFAULT NULL,
+  `numero_calcado` VARCHAR(2) NULL DEFAULT NULL,
+  `endereco` VARCHAR(50) NULL DEFAULT NULL,
+  `numero_endereco` VARCHAR(15) NULL DEFAULT NULL,
+  `possui_alergia` VARCHAR(15) NULL DEFAULT NULL,
+  `qual_alergia` VARCHAR(50) NULL DEFAULT NULL,
+  `portador_pne` VARCHAR(15) NULL DEFAULT NULL,
+  `qual_pne` VARCHAR(50) NULL DEFAULT NULL,
+  `medicao_controlada` VARCHAR(50) NULL DEFAULT NULL,
+  `qual_medicao` VARCHAR(50) NULL DEFAULT NULL,
+  `possui_bolsa_familia` VARCHAR(15) NULL DEFAULT NULL,
+  `numero_bolsa_familia` VARCHAR(16) NULL DEFAULT NULL,
+  `numero_cnis` VARCHAR(15) NULL DEFAULT NULL,
+  `renda_familiar` VARCHAR(50) NULL DEFAULT NULL,
+  `ex_aluno` VARCHAR(5) NULL DEFAULT NULL,
+  `seduc` VARCHAR(5) NULL DEFAULT NULL,
+  `qual_curso_fez` VARCHAR(50) NULL DEFAULT NULL,
+  `obs` VARCHAR(255) NULL DEFAULT NULL,
+  `nome_civil` VARCHAR(50) NULL DEFAULT NULL,
+  `responsavel_rg` VARCHAR(20) NULL DEFAULT NULL,
+  `responsavel_cpf` VARCHAR(20) NULL DEFAULT NULL,
+  `id_cad` INT(11) NULL DEFAULT NULL,
+  `inscrever` TINYINT NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_aluno`),
+  INDEX `cod_bairro` (`cod_bairro` ASC) VISIBLE,
+  INDEX `cod_escolaridade` (`cod_escolaridade` ASC) VISIBLE,
+  INDEX `cod_escola` (`cod_escola` ASC) VISIBLE,
+  INDEX `id_cad` (`id_cad` ASC) VISIBLE,
+  CONSTRAINT `aluno_ibfk_1`
+    FOREIGN KEY (`cod_bairro`)
+    REFERENCES `educanet`.`bairro` (`cod_bairro`),
+  CONSTRAINT `aluno_ibfk_2`
+    FOREIGN KEY (`cod_escolaridade`)
+    REFERENCES `educanet`.`escolaridade` (`cod_escolaridade`),
+  CONSTRAINT `aluno_ibfk_3`
+    FOREIGN KEY (`cod_escola`)
+    REFERENCES `educanet`.`escola` (`cod_escola`),
+  CONSTRAINT `aluno_ibfk_4`
+    FOREIGN KEY (`id_cad`)
+    REFERENCES `educanet`.`cadastro` (`id`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`anexo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`anexo` (
+  `cod_anexo` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_aluno` INT(11) NULL DEFAULT NULL,
+  `tipo_documento` VARCHAR(50) NULL DEFAULT NULL,
+  `arquivo` VARCHAR(50) NULL DEFAULT NULL,
+  `data_cadastro` DATETIME NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_anexo`),
+  INDEX `cod_aluno` (`cod_aluno` ASC) VISIBLE,
+  CONSTRAINT `anexo_ibfk_1`
+    FOREIGN KEY (`cod_aluno`)
+    REFERENCES `educanet`.`aluno` (`cod_aluno`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`autorizacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`autorizacao` (
+  `cod_autorizacao` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_usuario_autorizador` INT(11) NULL DEFAULT NULL,
+  `cod_turma` INT(11) NULL DEFAULT NULL,
+  `cod_turma_aluno` INT(11) NULL DEFAULT NULL,
+  `nome_proponente` VARCHAR(100) NULL DEFAULT NULL,
+  `data_cadastro` DATETIME NULL DEFAULT NULL,
+  `situacao` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_autorizacao`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`diretoria`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`diretoria` (
+  `cod_diretoria` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_diretoria` VARCHAR(50) NULL DEFAULT NULL,
+  `nome_responsavel` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_diretoria`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`coordenacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`coordenacao` (
+  `cod_coordenacao` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_diretoria` INT(11) NOT NULL,
+  `nome_coordenacao` VARCHAR(50) NULL DEFAULT NULL,
+  `nome_responsavel` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_coordenacao`),
+  INDEX `cod_diretoria` (`cod_diretoria` ASC) VISIBLE,
+  CONSTRAINT `coordenacao_ibfk_1`
+    FOREIGN KEY (`cod_diretoria`)
+    REFERENCES `educanet`.`diretoria` (`cod_diretoria`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`curso`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`curso` (
+  `cod_curso` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_coordenacao` INT(11) NOT NULL,
+  `nome_curso` VARCHAR(50) NULL DEFAULT NULL,
+  `informacoes_curso` VARCHAR(100) NULL DEFAULT NULL,
+  `ementa` VARCHAR(800) NULL DEFAULT NULL,
+  `objetivo` VARCHAR(255) NULL DEFAULT NULL,
+  `conteudo_programatico` VARCHAR(1200) NULL DEFAULT NULL,
+  `metodologia` VARCHAR(1200) NULL DEFAULT NULL,
+  `recursos_utilizados` VARCHAR(500) NULL DEFAULT NULL,
+  `sistematica_avaliacao` VARCHAR(255) NULL DEFAULT NULL,
+  `referencias` VARCHAR(300) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_curso`),
+  INDEX `cod_coordenacao` (`cod_coordenacao` ASC) VISIBLE,
+  CONSTRAINT `curso_ibfk_1`
+    FOREIGN KEY (`cod_coordenacao`)
+    REFERENCES `educanet`.`coordenacao` (`cod_coordenacao`))
+ENGINE = InnoDB
+AUTO_INCREMENT = 2;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`local_aula`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`local_aula` (
+  `cod_local` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_local` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_local`),
+  UNIQUE INDEX `nome_local` (`nome_local` ASC) VISIBLE)
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`usuario`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`usuario` (
+  `cod_usuario` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_usuario` VARCHAR(50) NULL DEFAULT NULL,
+  `senha` VARCHAR(50) NULL DEFAULT NULL,
+  `nome_completo` VARCHAR(50) NULL DEFAULT NULL,
+  `perfil` VARCHAR(30) NULL DEFAULT NULL,
+  `situacao` VARCHAR(10) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_usuario`),
+  UNIQUE INDEX `nome_usuario` (`nome_usuario` ASC) VISIBLE)
+ENGINE = InnoDB
+AUTO_INCREMENT = 2;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`log_sistema`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`log_sistema` (
+  `cod_log` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_usuario` INT(11) NULL DEFAULT NULL,
+  `descricao` VARCHAR(30) NULL DEFAULT NULL,
+  `operacao` VARCHAR(30) NULL DEFAULT NULL,
+  `nome_operacao` VARCHAR(60) NULL DEFAULT NULL,
+  `data_registro` DATE NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_log`),
+  INDEX `cod_usuario` (`cod_usuario` ASC) VISIBLE,
+  CONSTRAINT `log_sistema_ibfk_1`
+    FOREIGN KEY (`cod_usuario`)
+    REFERENCES `educanet`.`usuario` (`cod_usuario`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`periodo_letivo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`periodo_letivo` (
+  `cod_periodo_letivo` INT(11) NOT NULL AUTO_INCREMENT,
+  `periodo` VARCHAR(50) NULL DEFAULT NULL,
+  `data_inicio` DATE NULL DEFAULT NULL,
+  `data_termino` DATE NULL DEFAULT NULL,
+  `metas_educacao` VARCHAR(255) NULL DEFAULT NULL,
+  `metas_cultura` VARCHAR(255) NULL DEFAULT NULL,
+  `metas_esporte` VARCHAR(255) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_periodo_letivo`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`modulo`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`modulo` (
+  `cod_modulo` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_curso` INT(11) NOT NULL,
+  `nome_modulo` VARCHAR(50) NULL DEFAULT NULL,
+  `situacao_modulo` VARCHAR(25) NULL DEFAULT NULL,
+  `conteudo` VARCHAR(500) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_modulo`),
+  INDEX `cod_curso` (`cod_curso` ASC) VISIBLE,
+  CONSTRAINT `modulo_ibfk_1`
+    FOREIGN KEY (`cod_curso`)
+    REFERENCES `educanet`.`curso` (`cod_curso`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`professor`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`professor` (
+  `cod_professor` INT(11) NOT NULL AUTO_INCREMENT,
+  `nome_professor` VARCHAR(50) NULL DEFAULT NULL,
+  `area_formacao` VARCHAR(50) NULL DEFAULT NULL,
+  `email` VARCHAR(50) NULL DEFAULT NULL,
+  `telefone` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_professor`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`turma`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`turma` (
+  `cod_turma` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_periodo_letivo` INT(11) NULL DEFAULT NULL,
+  `cod_modulo` INT(11) NULL DEFAULT NULL,
+  `cod_local` INT(11) NULL DEFAULT NULL,
+  `cod_professor` INT(11) NULL DEFAULT NULL,
+  `nome_turma` VARCHAR(50) NULL DEFAULT NULL,
+  `data_inicio` DATE NULL DEFAULT NULL,
+  `data_termino` DATE NULL DEFAULT NULL,
+  `hora_inicio` TIME NULL DEFAULT NULL,
+  `hora_termino` TIME NULL DEFAULT NULL,
+  `faixa_etaria_inicial` DATE NULL DEFAULT NULL,
+  `faixa_etaria_final` DATE NULL DEFAULT NULL,
+  `turno` VARCHAR(50) NULL DEFAULT NULL,
+  `nome_faixa_etaria` VARCHAR(50) NULL DEFAULT NULL,
+  `dias_de_aula` VARCHAR(50) NULL DEFAULT NULL,
+  `qtd_aluno` INT(11) NULL DEFAULT NULL,
+  `idade_minima` INT(11) NULL DEFAULT NULL,
+  `idade_maxima` INT(11) NULL DEFAULT NULL,
+  `situacao` VARCHAR(10) NULL DEFAULT 'ABERTA',
+  PRIMARY KEY (`cod_turma`),
+  INDEX `cod_periodo_letivo` (`cod_periodo_letivo` ASC) VISIBLE,
+  INDEX `cod_modulo` (`cod_modulo` ASC) VISIBLE,
+  INDEX `cod_local` (`cod_local` ASC) VISIBLE,
+  INDEX `cod_professor` (`cod_professor` ASC) VISIBLE,
+  CONSTRAINT `turma_ibfk_1`
+    FOREIGN KEY (`cod_periodo_letivo`)
+    REFERENCES `educanet`.`periodo_letivo` (`cod_periodo_letivo`),
+  CONSTRAINT `turma_ibfk_2`
+    FOREIGN KEY (`cod_modulo`)
+    REFERENCES `educanet`.`modulo` (`cod_modulo`),
+  CONSTRAINT `turma_ibfk_3`
+    FOREIGN KEY (`cod_local`)
+    REFERENCES `educanet`.`local_aula` (`cod_local`),
+  CONSTRAINT `turma_ibfk_4`
+    FOREIGN KEY (`cod_professor`)
+    REFERENCES `educanet`.`professor` (`cod_professor`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`senha`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`senha` (
+  `cod_senha` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_turma` INT(11) NULL DEFAULT NULL,
+  `numero_senha` VARCHAR(20) NULL DEFAULT NULL,
+  `autenticacao` VARCHAR(20) NULL DEFAULT NULL,
+  `validade` DATE NULL DEFAULT NULL,
+  `situacao` VARCHAR(20) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_senha`),
+  INDEX `cod_turma` (`cod_turma` ASC) VISIBLE,
+  CONSTRAINT `senha_ibfk_1`
+    FOREIGN KEY (`cod_turma`)
+    REFERENCES `educanet`.`turma` (`cod_turma`),
+  CONSTRAINT `senha_ibfk_2`
+    FOREIGN KEY (`cod_turma`)
+    REFERENCES `educanet`.`turma` (`cod_turma`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`matricula`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`matricula` (
+  `id` INT(11) NOT NULL,
+  `codCurso` INT(11) NOT NULL,
+  `codModulo` INT(11) NOT NULL,
+  `codTurma` INT(11) NOT NULL,
+  `codSenha` INT(11) NOT NULL,
+  `cod_periodo_letivo` INT(11) NULL DEFAULT NULL,
+  INDEX `id` (`id` ASC) VISIBLE,
+  INDEX `cod_curso` (`codCurso` ASC) VISIBLE,
+  INDEX `cod_modulo` (`codModulo` ASC) VISIBLE,
+  INDEX `cod_turma` (`codTurma` ASC) VISIBLE,
+  INDEX `cod_senha` (`codSenha` ASC) VISIBLE,
+  INDEX `fk_matricula_periodo_letivo` (`cod_periodo_letivo` ASC) VISIBLE,
+  CONSTRAINT `fk_matricula_periodo_letivo`
+    FOREIGN KEY (`cod_periodo_letivo`)
+    REFERENCES `educanet`.`periodo_letivo` (`cod_periodo_letivo`),
+  CONSTRAINT `matricula_ibfk_1`
+    FOREIGN KEY (`id`)
+    REFERENCES `educanet`.`cadastro` (`id`),
+  CONSTRAINT `matricula_ibfk_2`
+    FOREIGN KEY (`codCurso`)
+    REFERENCES `educanet`.`curso` (`cod_curso`),
+  CONSTRAINT `matricula_ibfk_3`
+    FOREIGN KEY (`codModulo`)
+    REFERENCES `educanet`.`modulo` (`cod_modulo`),
+  CONSTRAINT `matricula_ibfk_4`
+    FOREIGN KEY (`codTurma`)
+    REFERENCES `educanet`.`turma` (`cod_turma`),
+  CONSTRAINT `matricula_ibfk_5`
+    FOREIGN KEY (`codSenha`)
+    REFERENCES `educanet`.`senha` (`cod_senha`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`solicitacao`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`solicitacao` (
+  `cod_solicitacao` INT(11) NOT NULL AUTO_INCREMENT,
+  `cod_usuario` INT(11) NULL DEFAULT NULL,
+  `cod_aluno` INT(11) NULL DEFAULT NULL,
+  `tipo_solicitacao` VARCHAR(50) NULL DEFAULT NULL,
+  `data_cadastro` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP() ON UPDATE CURRENT_TIMESTAMP(),
+  `situacao` VARCHAR(50) NULL DEFAULT NULL,
+  PRIMARY KEY (`cod_solicitacao`),
+  INDEX `cod_usuario` (`cod_usuario` ASC) VISIBLE,
+  CONSTRAINT `solicitacao_ibfk_1`
+    FOREIGN KEY (`cod_usuario`)
+    REFERENCES `educanet`.`usuario` (`cod_usuario`))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
+-- Table `educanet`.`turma_aluno`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `educanet`.`turma_aluno` (
+  `cod_turma_aluno` INT(11) NOT NULL AUTO_INCREMENT,
+  `situacao` VARCHAR(20) NULL DEFAULT NULL,
+  `autenticacao` VARCHAR(20) NULL DEFAULT NULL,
+  `data_matricula` DATE NULL DEFAULT NULL,
+  `turma_cod_turma` INT NOT NULL,
+  `aluno_cod_aluno` INT(11) NOT NULL,
+  PRIMARY KEY (`cod_turma_aluno`),
+  INDEX `fk_turma_aluno_turma1_idx` (`turma_cod_turma` ASC) VISIBLE,
+  INDEX `fk_turma_aluno_aluno1_idx` (`aluno_cod_aluno` ASC) VISIBLE,
+  CONSTRAINT `fk_turma_aluno_turma1`
+    FOREIGN KEY (`turma_cod_turma`)
+    REFERENCES `educanet`.`turma` (`cod_turma`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION,
+  CONSTRAINT `fk_turma_aluno_aluno1`
+    FOREIGN KEY (`aluno_cod_aluno`)
+    REFERENCES `educanet`.`aluno` (`cod_aluno`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB;
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
