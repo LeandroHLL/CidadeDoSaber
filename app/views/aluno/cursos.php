@@ -9,7 +9,6 @@ if (!isset($_SESSION['user'])) {
 
 $user = $_SESSION['user'];
 
-
 require_once __DIR__ . '/../../models/class/Conexao.class.php';
 require_once __DIR__ . '/../../models/class/Curso.class.php';
 
@@ -19,12 +18,13 @@ use app\models\class\Curso;
 $cursoModel = new Curso();
 
 
-$filtro = $_POST['filtro'] ?? '';
-$valor = $_POST['valor'] ?? '';
+$categoriasCoordenacao = $cursoModel->getTodasCoordenacoes();
 
+$nomeCurso = $_POST['nome_curso'] ?? '';
+$codCoordenacao = $_POST['cod_coordenacao'] ?? '';
 
-if ($filtro && $valor) {
-    $cursos = $cursoModel->getCursosFiltrados($filtro, $valor);
+if ($nomeCurso || $codCoordenacao) {
+    $cursos = $cursoModel->getCursosComFiltros($nomeCurso, $codCoordenacao);
 } else {
     $cursos = $cursoModel->getCursos();
 }
@@ -66,15 +66,28 @@ if ($filtro && $valor) {
         <!-- Formulário de Filtro -->
         <div class="filtro-container">
             <form action="cursos.php" method="POST" class="filtro-form">
-                <select name="filtro" id="filtro" class="filtro-select">
-                    <option value="nome_curso" <?php echo ($filtro == 'nome_curso') ? 'selected' : ''; ?>>Nome do Curso</option>
-                    <option value="nome_coordenacao" <?php echo ($filtro == 'nome_coordenacao') ? 'selected' : ''; ?>>Nome da Coordenação</option>
+                <!-- Filtro por Nome do Curso -->
+                <input type="text" name="nome_curso" class="filtro-input"
+                    value="<?php echo htmlspecialchars($nomeCurso); ?>"
+                    placeholder="Digite o nome do curso">
+
+                <!-- Filtro por Coordenação -->
+                <select name="cod_coordenacao" id="cod_coordenacao" class="filtro-select">
+                    <option value="">-- Selecione uma Coordenação --</option>
+                    <?php foreach ($categoriasCoordenacao as $categoria): ?>
+                        <option value="<?php echo htmlspecialchars($categoria['cod_coordenacao']); ?>"
+                            <?php echo ($codCoordenacao == $categoria['cod_coordenacao']) ? 'selected' : ''; ?>>
+                            <?php echo htmlspecialchars($categoria['nome_coordenacao']); ?>
+                        </option>
+                    <?php endforeach; ?>
                 </select>
-                <input type="text" name="valor" class="filtro-input" value="<?php echo htmlspecialchars($valor); ?>" placeholder="Digite o valor">
+
+                <!-- Botão de Filtrar -->
                 <button type="submit" class="filtro-button">Filtrar</button>
             </form>
         </div>
 
+        <!-- Lista de Cursos -->
         <div class="cursos-container">
             <?php if (empty($cursos)): ?>
                 <p>Não há cursos disponíveis no momento.</p>
@@ -84,7 +97,6 @@ if ($filtro && $valor) {
                         <h3><?php echo htmlspecialchars($curso['nome_curso']); ?></h3>
                         <p><strong>Informações:</strong> <?php echo htmlspecialchars($curso['informacoes_curso']); ?></p>
                         <p><strong>Coordenação:</strong> <?php echo htmlspecialchars($curso['nome_coordenacao']); ?></p>
-
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
