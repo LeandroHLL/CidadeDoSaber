@@ -1,18 +1,24 @@
 <?php
+// Iniciar a sessão para acessar as variáveis de sessão
+session_start();
 
+// Verifica se o usuário está logado, caso contrário, redireciona para o login
+if (!isset($_SESSION['user'])) {
+    header("Location: ../auth/login.php");
+    exit;
+}
+
+$user = $_SESSION['user']; // Dados do usuário logado
+
+// Incluindo os arquivos das classes
 require_once __DIR__ . '/../../models/class/Conexao.class.php';
 require_once __DIR__ . '/../../models/class/Curso.class.php';
 
 use app\models\class\Conexao;
 use app\models\class\Curso;
 
-
 $connection = Conexao::openInstance()->connection;
-
-
 $cursoModel = new Curso();
-
-
 $cursos = $cursoModel->getCursos();
 ?>
 
@@ -34,9 +40,13 @@ $cursos = $cursoModel->getCursos();
     <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
     <nav id="menu" class="main-nav" role="navigation">
         <ul class="main-menu">
+            <li>
+                <span style="color: #F29829;">Olá, <?php echo htmlspecialchars($user['username']); ?>!</span>
+            </li>
             <li><a href="dashboard.php">Perfil</a></li>
             <li><a href="cursos.php">Cursos</a></li>
-            <li><a href="../aluno/logout.php" rel="sponsored" class="external">Logout</a></li>
+
+            <li><a style="color: red;" href="../aluno/logout.php" rel="sponsored" class="external">Logout</a></li>
         </ul>
     </nav>
 </header>
