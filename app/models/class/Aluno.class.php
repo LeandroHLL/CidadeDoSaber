@@ -2,36 +2,44 @@
 
 namespace app\models\class;
 
-class Aluno{
-    
-    
-     protected function login($username, $password){
-        $query = "SELECT * FROM cadastro WHERE username = ? and password = ?";
+class Aluno
+{
+
+
+    protected function login($email, $password)
+    {
+        // Consulta o banco de dados com base no email e na senha
+        $query = "SELECT * FROM cadastro WHERE email = ? AND password = ?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
-        $stmt->bind_param('ss', $username, $password);
+        $stmt->bind_param('ss', $email, $password);
         $stmt->execute();
+
         $result = $stmt->get_result();
-        if($result->num_rows > 0){
+
+        if ($result->num_rows > 0) {
+
             $aluno = $result->fetch_assoc();
             Conexao::closeInstance();
             return $aluno;
-        }else{
+        } else {
             Conexao::closeInstance();
             return false;
         }
     }
 
-    protected function cadastrar($nome, $senha, $email, $numero){
-        
+
+    protected function cadastrar($nome, $senha, $email, $numero)
+    {
+
         $query = "SELECT * FROM cadastro WHERE email = ?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
         $stmt->bind_param('s', $email);
         $stmt->execute();
         $result = $stmt->get_result();
-        if($result->num_rows > 0){
+        if ($result->num_rows > 0) {
             Conexao::closeInstance();
             return false;
-        }else{
+        } else {
             $idade = 1;
             $query = "INSERT INTO cadastro (username, password, email, phone_number, age) VALUES (?,?,?,?,?)";
             $stmt->prepare($query);
@@ -43,11 +51,12 @@ class Aluno{
         }
     }
 
-    protected function inscreverM(\app\controllers\class\aluno $aluno){
-        
+    protected function inscreverM(\app\controllers\class\aluno $aluno)
+    {
+
         $data = $aluno->get_aluno();
-        $nome = $data['nome'];//var
-        $dataDeNascimento= $data['dataDeNsacimento'];//
+        $nome = $data['nome']; //var
+        $dataDeNascimento = $data['dataDeNsacimento']; //
         $pai = $data['pai'];
         $mae = $data['mae'];
         $sexo = $data['sexo'];
@@ -60,7 +69,7 @@ class Aluno{
         $estadoCivil = $data['estadoCivil'];
         $serie = $data['serie'];
         $turnoEscolar = $data['turnoEscolar'];
-        $codEscola = $data['codEscola'];//int
+        $codEscola = $data['codEscola']; //int
         $escolariedade = $data['escolariedade'];
         $tamanhoRoupa = $data['tamanhaRoupa'];
         $tamanhoCalcado = $data['tamanhoCalcado'];
@@ -71,29 +80,29 @@ class Aluno{
         $alergia = $data['alergia'];
         $medicacao = $data['medicacao'];
         $PNE = $data['PNE'];
-        
-        
+
+
         $query = "SELECT * FROM aluno WHERE rg = ? or cpf = ?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
         $stmt->bind_param('ss', $rg, $cpf);
         $stmt->execute();
         $result = $stmt->get_result();
-        if($result->num_rows > 0){
+        if ($result->num_rows > 0) {
 
             $row = $result->fetch_assoc();
-            if($row['ex_aluno'] !== null){
-                
+            if ($row['ex_aluno'] !== null) {
+
                 $query = "UPDATE aluno SET endereco = ?, bairro = ?, estadoCivil = ?, email = ?,  telprivado = ?, tamanhoRoupa = ?, tamanhoCalcado = ?, serie = ?, cod_escola = ?, cod_escolariedade = ? WHERE cpf =? and rg =?";
                 $stmt->prepare($query);
                 $stmt->bind_param('sissssssiiss', $endereco, $bairro, $estadoCivil, $email, $telPrivado, $tamanhoRoupa, $tamanhoCalcado, $serie, $codEscola, $escolariedade, $cpf, $rg);
                 $stmt->execute();
                 Conexao::closeInstance();
                 return "atualiza";
-            }else{
+            } else {
                 Conexao::closeInstance();
                 return "existe";
             }
-        }else{
+        } else {
 
             $inscricao = false;
             $query = "INSERT INTO aluno ( `cod_bairro`, `cod_escola`, `cod_escolaridade`, `nome_aluno`, `data_nascimento`,`nome_pai`, `nome_mae`, `sexo`, `rg`,
@@ -101,36 +110,59 @@ class Aluno{
             `numero_endereco`, `possui_alergia`, `portador_pne`, `medicao_controlada`,`possui_bolsa_familia`,`renda_familiar`,'inscricao') 
             VALUES ('?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?', '?','?')";
             $stmt->prepare($query);
-            $stmt->bind_param("iiissssssssssssssssssssssssss", $bairro, $codEscola,$escolariedade,$nome,$dataDeNascimento,$pai,$mae,$sexo,$rg,$cpf,$tel,$telPrivado,
-            $email, $tipoSangue,$estadoCivil,$serie,$turnoEscolar,$tamanhoRoupa,$tamanhoCalcado,$endereco,$alergia,$PNE,$medicacao,$bolsaFamilia,$rendaFamiliar,$inscricao);
+            $stmt->bind_param(
+                "iiissssssssssssssssssssssssss",
+                $bairro,
+                $codEscola,
+                $escolariedade,
+                $nome,
+                $dataDeNascimento,
+                $pai,
+                $mae,
+                $sexo,
+                $rg,
+                $cpf,
+                $tel,
+                $telPrivado,
+                $email,
+                $tipoSangue,
+                $estadoCivil,
+                $serie,
+                $turnoEscolar,
+                $tamanhoRoupa,
+                $tamanhoCalcado,
+                $endereco,
+                $alergia,
+                $PNE,
+                $medicacao,
+                $bolsaFamilia,
+                $rendaFamiliar,
+                $inscricao
+            );
             $stmt->execute();
             Conexao::closeInstance();
             return true;
         }
-
     }
 
-    protected function comfirmarInscricao($cpf,$rg){
-        
+    protected function comfirmarInscricao($cpf, $rg)
+    {
+
         $query = "SELECT * FROM aluno WHERE cpf =? and rg =?";
         $stmt = Conexao::openInstance()->connection->prepare($query);
         $stmt->bind_param('ss', $cpf, $rg);
         $stmt->execute();
         $result = $stmt->get_result();
-        if($result->num_rows > 0){
+        if ($result->num_rows > 0) {
             $query = "UPDATE aluno SET inscricao = true WHERE cpf =? and rg =?";
             $stmt->prepare($query);
             $stmt->bind_param('ss', $cpf, $rg);
             $stmt->execute();
             Conexao::closeInstance();
             return true;
-        }else{
+        } else {
             Conexao::closeInstance();
             return false;
         }
     }
 }
-
-
-
-    

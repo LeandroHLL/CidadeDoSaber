@@ -2,7 +2,8 @@
 
 namespace app\controllers\class;
 
-class Aluno extends \app\models\class\Aluno{
+class Aluno extends \app\models\class\Aluno
+{
 
     private $nome;
     private $dataDeNsacimento;
@@ -30,23 +31,47 @@ class Aluno extends \app\models\class\Aluno{
     private $bolsaFamalia;
     private $rendaFamiliar;
 
-    public function set($nome, $dataDeNsacimento, $pai, $mae, $sexo, $rg, $cpf, $telefoneResidencial,
-    $telefonePrivado, $email, $tipoSangue, $estadoCivil, $serie, $turnoEscolar, $codEscola, $escolariedade,
-     $tamanhaRoupa, $tamanhoCalcado, $endereco, $bairro, $alergia, $medicacao, $bolsaFamalia, $rendaFamiliar,$PNE) {
-        
-        if($bolsaFamalia === null){
-            $bolsaFamalia = "não possui";    
+    public function set(
+        $nome,
+        $dataDeNsacimento,
+        $pai,
+        $mae,
+        $sexo,
+        $rg,
+        $cpf,
+        $telefoneResidencial,
+        $telefonePrivado,
+        $email,
+        $tipoSangue,
+        $estadoCivil,
+        $serie,
+        $turnoEscolar,
+        $codEscola,
+        $escolariedade,
+        $tamanhaRoupa,
+        $tamanhoCalcado,
+        $endereco,
+        $bairro,
+        $alergia,
+        $medicacao,
+        $bolsaFamalia,
+        $rendaFamiliar,
+        $PNE
+    ) {
+
+        if ($bolsaFamalia === null) {
+            $bolsaFamalia = "não possui";
         }
-        if($alergia === null){
-            $alergia = "não possui";         
+        if ($alergia === null) {
+            $alergia = "não possui";
         }
-        if($medicacao === null){
-            $medicacao = "não possui";    
+        if ($medicacao === null) {
+            $medicacao = "não possui";
         }
-        if($PNE === null){
+        if ($PNE === null) {
             $PNE = "nao possui";
         }
-        
+
         $this->nome = $nome;
         $this->dataDeNsacimento = $dataDeNsacimento;
         $this->pai = $pai;
@@ -72,13 +97,11 @@ class Aluno extends \app\models\class\Aluno{
         $this->alergia = $alergia;
         $this->medicacao = $medicacao;
         $this->PNE = $PNE;
-
-
-        
     }
 
-    public function get_aluno(){
-        
+    public function get_aluno()
+    {
+
         $aluno = [];
         $aluno['nome'] = $this->nome;
         $aluno['dataDeNsacimento'] = $this->dataDeNsacimento;
@@ -100,7 +123,7 @@ class Aluno extends \app\models\class\Aluno{
         $aluno['tamanhoCalcado'] = $this->tamanhoCalcado;
         $aluno['endereco'] = $this->endereco;
         $aluno['bairro'] = $this->bairro;
-        $aluno['rendaFamiliar'] = $this->rendaFamiliar; 
+        $aluno['rendaFamiliar'] = $this->rendaFamiliar;
         $aluno['bolsaFamalia'] = $this->bolsaFamalia;
         $aluno['alergia'] = $this->alergia;
         $aluno['medicacao'] = $this->medicacao;
@@ -109,74 +132,72 @@ class Aluno extends \app\models\class\Aluno{
     }
 
     // Função para processar o login
-    public function loginC($nome, $senha)
-    {       
-            //echo "Memória inicial: " . memory_get_usage() . " bytes\n";
-            $aluno = $this->login($nome, $senha);
-            
-            if ($aluno) {
-                $_SESSION['user'] = $aluno;
-                header("Location:../views/aluno/dashboard.php");
-                exit();
-            } else {
-                $_SESSION['error'] = "Usuário ou senha incorretos!";
-                header("Location: ../views/auth/login.php");
-                exit();
-            }
+    public function loginC($email, $senha)
+    {
+        // Chama o método login usando email e senha
+        $aluno = $this->login($email, $senha);
+
+        if ($aluno) {
+            // Armazena os dados do aluno na sessão
+            $_SESSION['user'] = $aluno;
+            header("Location: ../views/aluno/dashboard.php");
+            exit();
+        } else {
+            // Define a mensagem de erro e redireciona
+            $_SESSION['error'] = "Email ou senha incorretoes!";
+            header("Location: ../views/auth/login.php");
+            exit();
+        }
     }
 
-    public function cadastrarC($nome, $senha, $email, $numero){
-        
-        if (is_string($nome) && is_string($senha) && is_string($email) && is_string($numero)){
-            if($this->cadastrar($nome, $senha, $email, $numero)){
-                
+
+    public function cadastrarC($nome, $senha, $email, $numero)
+    {
+
+        if (is_string($nome) && is_string($senha) && is_string($email) && is_string($numero)) {
+            if ($this->cadastrar($nome, $senha, $email, $numero)) {
+
                 $_SESSION['success'] = "Cadastro realizado com sucesso!";
                 unset($_SESSION['error']);
                 header("Location:../views/auth/login.php");
                 exit();
-            }else{
+            } else {
                 $_SESSION['error'] = "email invalido!";
                 header("Location:../views/auth/cadastro.php");
                 exit();
-            } 
-        }else{
+            }
+        } else {
             $_SESSION['error'] = "Por favor, preencha todos os campos corretamente!";
             header("Location:../views/auth/cadastro.php");
             exit();
         }
     }
-    
-    public function inscreverC(){   
 
-        if($this->inscreverM($this)){
+    public function inscreverC()
+    {
+
+        if ($this->inscreverM($this)) {
 
             $_SESSION['success'] = "Inscrição realizada com sucesso!";
             unset($_SESSION['error']);
             header("Location:../views/aluno/dashboard.php");
             exit();
-        
-        }elseif($this->inscreverM($this) === 'atualiza'){
-            
+        } elseif ($this->inscreverM($this) === 'atualiza') {
+
             $_SESSION['success'] = "Sua inscrição foi atualizada com sucesso!";
             unset($_SESSION['error']);
             header("Location:../views/aluno/dashboard.php");
             exit();
+        } elseif ($this->inscreverM($this) === 'existe') {
 
-        }elseif($this->inscreverM($this) === 'existe'){
-            
             $_SESSION['error'] = "Você já está inscrito nesta turma!";
             header("Location:../views/aluno/dashboard.php");
             exit();
+        } else {
 
-        }else{
-            
             $_SESSION['error'] = "Houve um erro ao tentar inscrever você nesta turma!";
             header("Location:../views/aluno/dashboard.php");
             exit();
-
         }
-
     }
 }
-
-
