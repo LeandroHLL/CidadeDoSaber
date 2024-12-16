@@ -99,7 +99,7 @@ class Aluno extends \app\models\class\Aluno
         $this->PNE = $PNE;
     }
 
-    public function getaluno()
+    public function get_aluno()
     {
 
         $aluno = [];

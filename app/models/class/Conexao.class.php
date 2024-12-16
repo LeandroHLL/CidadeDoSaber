@@ -7,7 +7,7 @@ namespace app\models\class;
     private static $instance = null;
     private const HOST = 'localhost';
     private const USER = 'root';
-    private const PASSWORD = '123456cds';
+    private const PASSWORD = '';
     private const DBNAME = 'educanet';
 
     // Construtor privado para evitar instância diretamente

@@ -54,7 +54,7 @@ class Aluno
     protected function inscreverM(\app\controllers\class\aluno $aluno)
     {
 
-        $data = $aluno->getaluno();
+        $data = $aluno->get_aluno();
         $nome = $data['nome']; //var
         $dataDeNascimento = $data['dataDeNsacimento']; //
         $pai = $data['pai'];
@@ -145,24 +145,4 @@ class Aluno
         }
     }
 
-    protected function comfirmarInscricao($cpf, $rg)
-    {
-
-        $query = "SELECT * FROM aluno WHERE cpf =? and rg =?";
-        $stmt = Conexao::openInstance()->connection->prepare($query);
-        $stmt->bind_param('ss', $cpf, $rg);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        if ($result->num_rows > 0) {
-            $query = "UPDATE aluno SET inscricao = true WHERE cpf =? and rg =?";
-            $stmt->prepare($query);
-            $stmt->bind_param('ss', $cpf, $rg);
-            $stmt->execute();
-            Conexao::closeInstance();
-            return true;
-        } else {
-            Conexao::closeInstance();
-            return false;
-        }
-    }
 }

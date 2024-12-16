@@ -39,4 +39,5 @@ class Admin extends \app\models\class\Admin{
         session_destroy();
         header('Location: ../views/admin/loegin.php');
     }
+
 }
