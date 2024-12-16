@@ -1,23 +1,19 @@
 <?php
-// Conexão com o banco de dados
-$host = 'localhost';
-$dbname = 'educanet';
-$username = 'root';
-$password = '123456cds';
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo 'Erro de conexão: ' . $e->getMessage();
-    exit;
-}
+require_once __DIR__ . '/../../models/class/Conexao.class.php';
+require_once __DIR__ . '/../../models/class/Curso.class.php';
 
-// Seleção dos cursos
-$sql = 'SELECT cod_curso, nome_curso, informacoes_curso FROM curso';
-$stmt = $pdo->query($sql);
-$cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+use app\models\class\Conexao;
+use app\models\class\Curso;
 
+
+$connection = Conexao::openInstance()->connection;
+
+
+$cursoModel = new Curso();
+
+
+$cursos = $cursoModel->getCursos();
 ?>
 
 <!DOCTYPE html>
@@ -30,6 +26,7 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link rel="stylesheet" href="../../../public/css/cursosstyles.css">
     <link rel="stylesheet" href="../../../public/css/templatemo-grad-school.css">
 </head>
+
 <header class="main-header clearfix" role="header">
     <div class="logo">
         <a href="../../../index.html"><em>Educa</em> Net</a>
@@ -37,7 +34,7 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
     <nav id="menu" class="main-nav" role="navigation">
         <ul class="main-menu">
-            <li><a href="#section1">Perfil</a></li>
+            <li><a href="dashboard.php">Perfil</a></li>
             <li><a href="cursos.php">Cursos</a></li>
             <li><a href="../aluno/logout.php" rel="sponsored" class="external">Logout</a></li>
         </ul>
@@ -48,12 +45,16 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <div class="dashboard">
         <h1>Dashboard de Cursos</h1>
         <div class="cursos-container">
-            <?php foreach ($cursos as $curso): ?>
-                <div class="curso" onclick="abrirMatricula(<?php echo $curso['cod_curso']; ?>)">
-                    <h3><?php echo htmlspecialchars($curso['nome_curso']); ?></h3>
-                    <p><strong>Informações:</strong> <?php echo htmlspecialchars($curso['informacoes_curso']); ?></p>
-                </div>
-            <?php endforeach; ?>
+            <?php if (empty($cursos)): ?>
+                <p>Não há cursos disponíveis no momento.</p>
+            <?php else: ?>
+                <?php foreach ($cursos as $curso): ?>
+                    <div class="curso" onclick="abrirMatricula(<?php echo $curso['cod_curso']; ?>)">
+                        <h3><?php echo htmlspecialchars($curso['nome_curso']); ?></h3>
+                        <p><strong>Informações:</strong> <?php echo htmlspecialchars($curso['informacoes_curso']); ?></p>
+                    </div>
+                <?php endforeach; ?>
+            <?php endif; ?>
         </div>
     </div>
 
@@ -81,11 +82,9 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
             document.getElementById('cod_curso').value = codCurso;
         }
 
-
         function fecharMatricula() {
             document.getElementById('modal-matricula').style.display = 'none';
         }
-
 
         window.onclick = function(event) {
             var modal = document.getElementById('modal-matricula');
@@ -93,7 +92,6 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 modal.style.display = 'none';
             }
         };
-
 
         document.getElementById('modal-matricula').style.display = 'none';
     </script>
