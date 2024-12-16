@@ -125,3 +125,55 @@ h1 {
     font-size: 36px;
     font-weight: bold;
 }
+/* Container do formulário */
+.filtro-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* Estilização geral do formulário */
+.filtro-form {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espaço entre os elementos */
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    padding: 8px 12px;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Select (dropdown) */
+.filtro-select {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Input de texto */
+.filtro-input {
+    padding: 6px 10px;
+    font-size: 14px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    flex: 1; /* Faz o input expandir para ocupar espaço disponível */
+}
+
+/* Botão de filtro */
+.filtro-button {
+    padding: 6px 12px;
+    font-size: 14px;
+    color: #fff;
+    background-color: #f29829;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.filtro-button:hover {
+    background-color: #e08724;
+}

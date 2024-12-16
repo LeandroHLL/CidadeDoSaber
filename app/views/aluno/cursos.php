@@ -65,16 +65,13 @@ if ($filtro && $valor) {
 
         <!-- Formulário de Filtro -->
         <div class="filtro-container">
-            <form action="cursos.php" method="POST">
-                <label for="filtro">Filtrar por:</label>
-                <select name="filtro" id="filtro">
+            <form action="cursos.php" method="POST" class="filtro-form">
+                <select name="filtro" id="filtro" class="filtro-select">
                     <option value="nome_curso" <?php echo ($filtro == 'nome_curso') ? 'selected' : ''; ?>>Nome do Curso</option>
                     <option value="nome_coordenacao" <?php echo ($filtro == 'nome_coordenacao') ? 'selected' : ''; ?>>Nome da Coordenação</option>
                 </select>
-
-
-                <input type="text" name="valor" value="<?php echo htmlspecialchars($valor); ?>" placeholder="Digite o valor para buscar">
-                <button type="submit">Filtrar</button>
+                <input type="text" name="valor" class="filtro-input" value="<?php echo htmlspecialchars($valor); ?>" placeholder="Digite o valor">
+                <button type="submit" class="filtro-button">Filtrar</button>
             </form>
         </div>
 
