@@ -73,18 +73,24 @@ $cursos = $cursoModel->getCursos();
         <div class="modal-conteudo">
             <span class="fechar" onclick="fecharMatricula()">&times;</span>
             <h2>Matricule-se no Curso</h2>
-            <form action="matricula.php" method="POST">
+            <form action="matricula.php" method="POST" class="form-matricula">
                 <input type="hidden" id="cod_curso" name="cod_curso" value="">
-                <label for="nome_aluno">Nome do Aluno:</label>
-                <input type="text" id="nome_aluno" name="nome_aluno" required>
 
-                <label for="email_aluno">Email do Aluno:</label>
-                <input type="email" id="email_aluno" name="email_aluno" required>
+                <div class="campo-form">
+                    <label for="nome_aluno">Nome do Aluno:</label>
+                    <input type="text" id="nome_aluno" name="nome_aluno" required>
+                </div>
 
-                <button type="submit">Matricular</button>
+                <div class="campo-form">
+                    <label for="email_aluno">Email do Aluno:</label>
+                    <input type="email" id="email_aluno" name="email_aluno" required>
+                </div>
+
+                <button type="submit" class="btn-matricula">Matricular</button>
             </form>
         </div>
     </div>
+
 
     <script>
         function abrirMatricula(codCurso) {
