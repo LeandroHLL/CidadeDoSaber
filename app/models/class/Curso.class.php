@@ -15,8 +15,9 @@ class Curso
 
     public function getCursos()
     {
-
-        $sql = 'SELECT cod_curso, nome_curso, informacoes_curso FROM curso';
+        $sql = 'SELECT curso.cod_curso, curso.nome_curso, curso.informacoes_curso, coordenacao.nome_coordenacao 
+                FROM curso
+                JOIN coordenacao ON curso.cod_coordenacao = coordenacao.cod_coordenacao';
         $result = $this->connection->query($sql);
 
         if ($result) {
@@ -24,5 +25,34 @@ class Curso
         } else {
             return [];
         }
+    }
+
+    public function getCursosFiltrados($filtro, $valor)
+    {
+
+        $validFilters = ['nome_curso', 'nome_coordenacao']; // agora inclui nome da coordenação
+        if (!in_array($filtro, $validFilters)) {
+            die("Filtro inválido.");
+        }
+
+
+        $query = "SELECT curso.cod_curso, curso.nome_curso, curso.informacoes_curso, coordenacao.nome_coordenacao 
+                  FROM curso
+                  JOIN coordenacao ON curso.cod_coordenacao = coordenacao.cod_coordenacao
+                  WHERE $filtro LIKE ?";
+        $stmt = $this->connection->prepare($query);
+
+        if ($stmt === false) {
+            die("Erro na preparação da consulta: " . $this->connection->error);
+        }
+
+
+        $valor = "%" . $valor . "%";
+        $stmt->bind_param("s", $valor);
+
+        $stmt->execute();
+
+        $result = $stmt->get_result();
+        return $result->fetch_all(MYSQLI_ASSOC);
     }
 }

@@ -1,25 +1,34 @@
 <?php
-// Iniciar a sessão para acessar as variáveis de sessão
+
 session_start();
 
-// Verifica se o usuário está logado, caso contrário, redireciona para o login
 if (!isset($_SESSION['user'])) {
     header("Location: ../auth/login.php");
     exit;
 }
 
-$user = $_SESSION['user']; // Dados do usuário logado
+$user = $_SESSION['user'];
 
-// Incluindo os arquivos das classes
+
 require_once __DIR__ . '/../../models/class/Conexao.class.php';
 require_once __DIR__ . '/../../models/class/Curso.class.php';
 
 use app\models\class\Conexao;
 use app\models\class\Curso;
 
-$connection = Conexao::openInstance()->connection;
 $cursoModel = new Curso();
-$cursos = $cursoModel->getCursos();
+
+
+$filtro = $_POST['filtro'] ?? '';
+$valor = $_POST['valor'] ?? '';
+
+
+if ($filtro && $valor) {
+    $cursos = $cursoModel->getCursosFiltrados($filtro, $valor);
+} else {
+    $cursos = $cursoModel->getCursos();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -33,27 +42,42 @@ $cursos = $cursoModel->getCursos();
     <link rel="stylesheet" href="../../../public/css/templatemo-grad-school.css">
 </head>
 
-<header class="main-header clearfix" role="header">
-    <div class="logo">
-        <a href="../../../index.html"><em>Educa</em> Net</a>
-    </div>
-    <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
-    <nav id="menu" class="main-nav" role="navigation">
-        <ul class="main-menu">
-            <li>
-                <span style="color: #F29829;">Olá, <?php echo htmlspecialchars($user['username']); ?>!</span>
-            </li>
-            <li><a href="dashboard.php">Perfil</a></li>
-            <li><a href="cursos.php">Cursos</a></li>
-
-            <li><a style="color: red;" href="../aluno/logout.php" rel="sponsored" class="external">Logout</a></li>
-        </ul>
-    </nav>
-</header>
-
 <body>
+    <header class="main-header clearfix" role="header">
+        <div class="logo">
+            <a href="../../../index.html"><em>Educa</em> Net</a>
+        </div>
+        <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
+        <nav id="menu" class="main-nav" role="navigation">
+            <ul class="main-menu">
+                <li>
+                    <span style="color: #F29829;">Olá, <?php echo htmlspecialchars($user['username']); ?>!</span>
+                </li>
+                <li><a href="dashboard.php">Perfil</a></li>
+                <li><a href="cursos.php">Cursos</a></li>
+                <li><a style="color: red;" href="../aluno/logout.php" rel="sponsored" class="external">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
     <div class="dashboard">
         <h1>Dashboard de Cursos</h1>
+
+        <!-- Formulário de Filtro -->
+        <div class="filtro-container">
+            <form action="cursos.php" method="POST">
+                <label for="filtro">Filtrar por:</label>
+                <select name="filtro" id="filtro">
+                    <option value="nome_curso" <?php echo ($filtro == 'nome_curso') ? 'selected' : ''; ?>>Nome do Curso</option>
+                    <option value="nome_coordenacao" <?php echo ($filtro == 'nome_coordenacao') ? 'selected' : ''; ?>>Nome da Coordenação</option>
+                </select>
+
+
+                <input type="text" name="valor" value="<?php echo htmlspecialchars($valor); ?>" placeholder="Digite o valor para buscar">
+                <button type="submit">Filtrar</button>
+            </form>
+        </div>
+
         <div class="cursos-container">
             <?php if (empty($cursos)): ?>
                 <p>Não há cursos disponíveis no momento.</p>
@@ -62,6 +86,8 @@ $cursos = $cursoModel->getCursos();
                     <div class="curso" onclick="abrirMatricula(<?php echo $curso['cod_curso']; ?>)">
                         <h3><?php echo htmlspecialchars($curso['nome_curso']); ?></h3>
                         <p><strong>Informações:</strong> <?php echo htmlspecialchars($curso['informacoes_curso']); ?></p>
+                        <p><strong>Coordenação:</strong> <?php echo htmlspecialchars($curso['nome_coordenacao']); ?></p>
+
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
@@ -91,7 +117,6 @@ $cursos = $cursoModel->getCursos();
         </div>
     </div>
 
-
     <script>
         function abrirMatricula(codCurso) {
             document.getElementById('modal-matricula').style.display = 'flex';
@@ -111,7 +136,6 @@ $cursos = $cursoModel->getCursos();
 
         document.getElementById('modal-matricula').style.display = 'none';
     </script>
-
 </body>
 
 </html>
