@@ -38,10 +38,8 @@ $cursos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <nav id="menu" class="main-nav" role="navigation">
         <ul class="main-menu">
             <li><a href="#section1">Perfil</a></li>
-
-            <li><a href="#section4">Cursos</a></li>
-            <!-- <li><a href="sign/login.php" class="fa-external-link-square">Logar</a></li> -->
-            <li><a href="sign/login.php" rel="sponsored" class="external">Logar</a></li>
+            <li><a href="cursos.php">Cursos</a></li>
+            <li><a href="../aluno/logout.php" rel="sponsored" class="external">Logout</a></li>
         </ul>
     </nav>
 </header>
