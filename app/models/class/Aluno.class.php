@@ -54,7 +54,7 @@ class Aluno
     protected function inscreverM(\app\controllers\class\aluno $aluno)
     {
 
-        $data = $aluno->get_aluno();
+        $data = $aluno->getaluno();
         $nome = $data['nome']; //var
         $dataDeNascimento = $data['dataDeNsacimento']; //
         $pai = $data['pai'];
