@@ -1,4 +1,5 @@
 filtragens pagina admnistrador/search/ funcionalidade MVC
-pre cadastro do usuario
+pré cadastro do usuario
 funções do admnistrador
+triggers do banco
 
