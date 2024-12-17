@@ -1,0 +1,55 @@
+DELIMITER //
+
+CREATE TRIGGER situacao_curso
+AFTER UPDATE ON aluno
+FOR EACH ROW
+BEGIN
+    -- Verificar se a turma não está fechada
+    IF (SELECT situacao FROM turma WHERE cod_turma = NEW.cod_turma) != 'fechado' THEN
+        -- Contar o número de alunos na turma e comparar com a quantidade máxima de alunos
+        IF (SELECT COUNT(*) FROM aluno WHERE cod_turma = NEW.cod_turma) = (SELECT qtd_aluno FROM turma WHERE cod_turma = NEW.cod_turma) THEN
+            UPDATE turma 
+            SET situacao = 'sem_vagas' 
+            WHERE cod_turma = NEW.cod_turma;
+        ELSE
+            UPDATE turma 
+            SET situacao = 'aberta' 
+            WHERE cod_turma = NEW.cod_turma;
+        END IF;
+
+        -- Verificar se a data de início da turma é igual à data atual e alterar a situação para 'fechado'
+        IF (SELECT data_inicio FROM turma WHERE cod_turma = NEW.cod_turma) = CURDATE() THEN
+            UPDATE turma 
+            SET situacao = 'fechado' 
+            WHERE cod_turma = NEW.cod_turma;
+        END IF;
+    END IF;
+END //
+
+DELIMITER ;
+DELIMITER //
+
+CREATE TRIGGER deleta_cadastro
+after update on aluno
+for each row
+BEGIN
+	delete from new.aluno where new.inscricao = 0;
+END//
+
+DELIMITER ;
+DELIMITER //
+
+CREATE TRIGGER situacao
+AFTER UPDATE ON aluno
+FOR EACH ROW
+BEGIN
+    -- Verifica se a situação do aluno foi alterada para 2 e se a data de cadastro é exatamente uma semana atrás
+    IF NEW.aluno.situacao = 2 AND NEW.data_cadastro <= DATE_SUB(CURDATE(), INTERVAL 1 WEEK) THEN
+        -- Atualiza a situação do aluno para 0
+        UPDATE aluno 
+        SET situacao = 0 
+        WHERE cod_aluno = NEW.cod_aluno;
+    END IF;
+END //
+
+DELIMITER ;	
