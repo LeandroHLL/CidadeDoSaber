@@ -24,7 +24,7 @@ class Admin extends \app\models\class\Admin{
             $_SESSION['administrador'] = $administrador;
             $this->nome = $nome_usuario;
             $this->senha = $senha;
-            header('Location: ../views/admin/user.php');
+            header('Location: ../views/admin/dashboard.php');
 
         }else {
 
