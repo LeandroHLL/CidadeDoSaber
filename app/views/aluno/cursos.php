@@ -112,12 +112,7 @@ if ($nomeCurso || $codCoordenacao) {
                 <input type="hidden" id="cod_curso" name="cod_curso" value="">
 
                 <div class="campo-form">
-                    <label for="nome_aluno">Nome do Aluno:</label>
-                    <input type="text" id="nome_aluno" name="nome_aluno" required>
-                </div>
-
-                <div class="campo-form">
-                    <label for="email_aluno">Email do Aluno:</label>
+                    <label for="email_aluno">Confirme seu e-mail:</label>
                     <input type="email" id="email_aluno" name="email_aluno" required>
                 </div>
 
