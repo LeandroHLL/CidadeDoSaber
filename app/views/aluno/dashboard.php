@@ -8,13 +8,6 @@ if (!isset($_SESSION['user'])) {
 }
 
 $user = $_SESSION['user'];
-
-// // Aqui, você pode incluir a lógica para pegar os cursos e o status das matrículas do aluno
-// require_once __DIR__ . '/../../models/class/Curso.class.php';
-// $cursoModel = new Curso();
-
-// // Exemplo de como pegar os cursos do aluno (substitua pela lógica real)
-// $cursosAluno = $cursoModel->getCursosDoAluno($user['id']); // Método fictício, ajuste conforme necessário
 ?>
 
 <!DOCTYPE html>
@@ -51,7 +44,7 @@ $user = $_SESSION['user'];
     <!-- Perfil do Usuário -->
     <div class="profile-section">
       <h2>Informações do Usuário:</h2>
-      <p><strong>Username:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
+      <p><strong>Nome de Usuário:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
       <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
       <p><strong>ID:</strong> <?php echo htmlspecialchars($user['id']); ?></p>
     </div>
@@ -59,37 +52,26 @@ $user = $_SESSION['user'];
     <!-- Meus Cursos -->
     <div class="courses-section">
       <h2>Meus Cursos</h2>
-      <?php if (empty($cursosAluno)): ?>
-        <p>Você ainda não está matriculado em nenhum curso.</p>
-      <?php else: ?>
-        <table>
-          <thead>
-            <tr>
-              <th>Nome do Curso</th>
-              <th>Status da Matrícula</th>
-            </tr>
-          </thead>
-          <tbody>
-            <?php foreach ($cursosAluno as $curso): ?>
-              <tr>
-                <td><?php echo htmlspecialchars($curso['nome_curso']); ?></td>
-                <td>
-                  <?php
-                  // Exemplo de status de matrícula. Adapte conforme seu sistema
-                  if ($curso['status_matricula'] == 'pendente') {
-                    echo 'Matrícula Pendente';
-                  } elseif ($curso['status_matricula'] == 'confirmada') {
-                    echo 'Matrícula Confirmada';
-                  } else {
-                    echo 'Status Indefinido';
-                  }
-                  ?>
-                </td>
-              </tr>
-            <?php endforeach; ?>
-          </tbody>
-        </table>
-      <?php endif; ?>
+      <p>Você ainda não está matriculado em nenhum curso.</p>
+      <!-- Exemplo de Cursos -->
+      <table>
+        <thead>
+          <tr>
+            <th>Nome do Curso</th>
+            <th>Status da Matrícula</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Curso de Programação</td>
+            <td>Matrícula Confirmada</td>
+          </tr>
+          <tr>
+            <td>Curso de Design Gráfico</td>
+            <td>Matrícula Pendente</td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </body>
