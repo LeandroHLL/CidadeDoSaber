@@ -108,7 +108,7 @@ if ($nomeCurso || $codCoordenacao) {
         <div class="modal-conteudo">
             <span class="fechar" onclick="fecharMatricula()">&times;</span>
             <h2>Matricule-se no Curso</h2>
-            <form action="matricula.php" method="POST" class="form-matricula">
+            <form action="../../controllers/class/matricula.php" method="POST" class="form-matricula">
                 <input type="hidden" id="cod_curso" name="cod_curso" value="">
 
                 <div class="campo-form">
