@@ -1,6 +1,3 @@
-<?php
-require_once "../common/header.php";
-?>
 <html>
 
 <head>
@@ -9,10 +6,26 @@ require_once "../common/header.php";
     <title>Status de Matrícula</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="../../../public/css/templatemo-grad-school.css" rel="stylesheet">
 </head>
 
 <body class="bg-gray-100 h-screen flex overflow-hidden">
-    <main class="flex-1 p-6 overflow-y-auto">
+    <!-- Novo header inserido diretamente -->
+    <header class="main-header clearfix" role="header">
+        <div class="logo">
+            <a href="../../../index.html"><em>Educa</em> Net</a>
+        </div>
+        <a href="#menu" class="menu-link"><i class="fa fa-bars"></i></a>
+        <nav id="menu" class="main-nav" role="navigation">
+            <ul class="main-menu">
+                <li><a href="dashboard.php">Matriculas</a></li>
+                <li><a href="cursos.php">Cursos</a></li>
+                <li><a style="color: red;" href="../admin/loginadm.php" rel="sponsored" class="external">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="flex-1 p-6 overflow-y-auto pt-20">
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">Status das Matrículas</h1>
         </div>
@@ -48,37 +61,34 @@ require_once "../common/header.php";
                     </thead>
                     <tbody>
                         <!-- Placeholder para Dados -->
-                        <tr>
-                            <td class="px-4 py-2">001</td>
-                            <td class="px-4 py-2">João Silva</td>
-                            <td class="px-4 py-2">joao.silva@example.com</td>
-                            <td class="px-4 py-2">Engenharia</td>
-                            <td class="px-4 py-2">123.456.789-00</td>
-                            <td class="px-4 py-2">Rua Exemplo, 123</td>
-                            <td class="px-4 py-2" data-status="Aprovado">
-                                <span class="bg-green-200 text-green-800 text-xs px-2 py-1 rounded-full">Aprovado</span>
-                            </td>
-                            <td class="px-4 py-2">
-                                <button class="text-blue-500 hover:underline mr-2"><i class="fas fa-eye"></i> Visualizar</button>
-                                <button class="text-red-500 hover:underline"><i class="fas fa-trash"></i> Excluir</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td class="px-4 py-2">002</td>
-                            <td class="px-4 py-2">Maria Oliveira</td>
-                            <td class="px-4 py-2">maria.oliveira@example.com</td>
-                            <td class="px-4 py-2">Administração</td>
-                            <td class="px-4 py-2">987.654.321-00</td>
-                            <td class="px-4 py-2">Av. Principal, 456</td>
-                            <td class="px-4 py-2" data-status="Pendente">
-                                <span class="bg-yellow-200 text-yellow-800 text-xs px-2 py-1 rounded-full">Pendente</span>
-                            </td>
-                            <td class="px-4 py-2">
-                                <button class="text-blue-500 hover:underline mr-2"><i class="fas fa-eye"></i> Visualizar</button>
-                                <button class="text-red-500 hover:underline"><i class="fas fa-trash"></i> Excluir</button>
-                            </td>
-                        </tr>
-                        <!-- Fim do Placeholder -->
+                        <?php
+                        // Exemplo de consulta aos alunos pendentes. Substitua pela sua consulta real
+                        $alunos = [
+                            ['id' => 1, 'nome' => 'João Silva', 'email' => 'joao.silva@example.com', 'curso' => 'Engenharia', 'cpf' => '123.456.789-00', 'endereco' => 'Rua Exemplo, 123', 'status' => 'Aprovado'],
+                            ['id' => 2, 'nome' => 'Maria Oliveira', 'email' => 'maria.oliveira@example.com', 'curso' => 'Administração', 'cpf' => '987.654.321-00', 'endereco' => 'Av. Principal, 456', 'status' => 'Pendente'],
+                        ];
+
+                        foreach ($alunos as $aluno) {
+                            ?>
+                            <tr>
+                                <td class="px-4 py-2"><?= $aluno['id'] ?></td>
+                                <td class="px-4 py-2"><?= $aluno['nome'] ?></td>
+                                <td class="px-4 py-2"><?= $aluno['email'] ?></td>
+                                <td class="px-4 py-2"><?= $aluno['curso'] ?></td>
+                                <td class="px-4 py-2"><?= $aluno['cpf'] ?></td>
+                                <td class="px-4 py-2"><?= $aluno['endereco'] ?></td>
+                                <td class="px-4 py-2" data-status="<?= $aluno['status'] ?>">
+                                    <span class="bg-<?= $aluno['status'] == 'Aprovado' ? 'green' : ($aluno['status'] == 'Pendente' ? 'yellow' : 'red') ?>-200 text-<?= $aluno['status'] == 'Aprovado' ? 'green' : ($aluno['status'] == 'Pendente' ? 'yellow' : 'red') ?>-800 text-xs px-2 py-1 rounded-full"><?= $aluno['status'] ?></span>
+                                </td>
+                                <td class="px-4 py-2">
+                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Aprovado" class="text-blue-500 hover:underline mr-2">Aprovar</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Pendente" class="text-yellow-500 hover:underline mr-2">Pendente</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Rejeitado" class="text-red-500 hover:underline">Rejeitar</a>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
                     </tbody>
                 </table>
             </div>
