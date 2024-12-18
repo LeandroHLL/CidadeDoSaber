@@ -1,5 +1,4 @@
 <?php
-
 session_start();
 
 if (!isset($_SESSION['user'])) {
@@ -17,7 +16,6 @@ use app\models\class\Curso;
 
 $cursoModel = new Curso();
 
-
 $categoriasCoordenacao = $cursoModel->getTodasCoordenacoes();
 
 $nomeCurso = $_POST['nome_curso'] ?? '';
@@ -28,12 +26,10 @@ if ($nomeCurso || $codCoordenacao) {
 } else {
     $cursos = $cursoModel->getCursos();
 }
-
 ?>
 
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,7 +37,6 @@ if ($nomeCurso || $codCoordenacao) {
     <link rel="stylesheet" href="../../../public/css/cursosstyles.css">
     <link rel="stylesheet" href="../../../public/css/templatemo-grad-school.css">
 </head>
-
 <body>
     <header class="main-header clearfix" role="header">
         <div class="logo">
@@ -85,6 +80,21 @@ if ($nomeCurso || $codCoordenacao) {
                 <!-- Botão de Filtrar -->
                 <button type="submit" class="filtro-button">Filtrar</button>
             </form>
+        </div>
+
+        <!-- Exibir as mensagens de erro ou sucesso abaixo do formulário de filtro -->
+        <div class="mensagens">
+            <?php
+            if (isset($_SESSION['error_message'])) {
+                echo "<p style='color: red;'>" . $_SESSION['error_message'] . "</p>";
+                unset($_SESSION['error_message']);
+            }
+
+            if (isset($_SESSION['success_message'])) {
+                echo "<p style='color: green;'>" . $_SESSION['success_message'] . "</p>";
+                unset($_SESSION['success_message']);
+            }
+            ?>
         </div>
 
         <!-- Lista de Cursos -->
@@ -141,5 +151,4 @@ if ($nomeCurso || $codCoordenacao) {
         document.getElementById('modal-matricula').style.display = 'none';
     </script>
 </body>
-
 </html>

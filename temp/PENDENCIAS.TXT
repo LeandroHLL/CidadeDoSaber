@@ -2,4 +2,4 @@ filtragens pagina admnistrador/search/ funcionalidade MVC
 pré cadastro do usuario
 funções do admnistrador
 triggers do banco
-
+trocar redirecionamento na matricula

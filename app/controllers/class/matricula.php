@@ -1,4 +1,6 @@
 <?php
+session_start();
+
 // Conexão com o banco de dados
 $conn = new mysqli("localhost", "root", "123456cds", "educanet");
 
@@ -22,9 +24,23 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $id_cadastro = $row['id'];
 
-    // Buscar uma senha disponível
-    $sql_find_senha = "SELECT cod_senha, autenticacao FROM senha WHERE situacao = 'DISPONIVEL' LIMIT 1";
-    $result_senha = $conn->query($sql_find_senha);
+    // Buscar uma senha disponível com base na lógica de junção
+    $sql_find_senha = "
+    SELECT senha.cod_senha, senha.autenticacao, curso.cod_curso
+    FROM senha
+    INNER JOIN turma ON turma.cod_turma = senha.cod_turma
+    INNER JOIN modulo ON modulo.cod_modulo = turma.cod_modulo
+    INNER JOIN curso ON curso.cod_curso = modulo.cod_curso
+    WHERE senha.situacao = 'DISPONIVEL' 
+    AND turma.cod_periodo_letivo = 7 
+    AND curso.cod_curso = ?
+    LIMIT 1";
+
+    // Preparar e executar a consulta com o código do curso
+    $stmt_senha = $conn->prepare($sql_find_senha);
+    $stmt_senha->bind_param("i", $cod_curso); // Passar o código do curso como parâmetro
+    $stmt_senha->execute();
+    $result_senha = $stmt_senha->get_result();
 
     if ($result_senha->num_rows > 0) {
         $row_senha = $result_senha->fetch_assoc();
@@ -39,19 +55,25 @@ if ($result->num_rows > 0) {
 
         // Atualizar o status da senha para "PENDENTE"
         $sql_update_senha = "UPDATE senha SET situacao = 'PENDENTE' WHERE cod_senha = ?";
-        $stmt_senha = $conn->prepare($sql_update_senha);
-        $stmt_senha->bind_param("i", $cod_senha);
-        $stmt_senha->execute();
+        $stmt_senha_update = $conn->prepare($sql_update_senha);
+        $stmt_senha_update->bind_param("i", $cod_senha);
+        $stmt_senha_update->execute();
 
-        echo "Matrícula realizada com sucesso!";
+        $_SESSION['success_message'] = "Matrícula realizada com sucesso!";
     } else {
-        echo "Não há senhas disponíveis no momento.";
+        $_SESSION['error_message'] = "Não há senhas disponíveis no momento para este curso e período letivo.";
     }
+
+    // Fechar o statement da senha
+    $stmt_senha->close();
 } else {
-    echo "E-mail não encontrado!";
+    $_SESSION['error_message'] = "E-mail não encontrado!";
 }
 
 // Fechar conexões
 $stmt->close();
 $conn->close();
-?>
+
+// Redirecionar de volta para a página de cursos
+header("Location: ../../views/aluno/cursos.php");
+exit;
