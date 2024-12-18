@@ -1,0 +1,91 @@
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f9;
+  color: #333;
+}
+
+header {
+  background-color: #2a3d4f;
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+header a {
+  color: white;
+  text-decoration: none;
+}
+
+.dashboard-container {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px;
+}
+
+.profile-section,
+.courses-section {
+  width: 45%;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.profile-section h2,
+.courses-section h2 {
+  font-size: 1.5rem;
+  margin-bottom: 20px;
+  color: #2a3d4f;
+}
+
+.profile-section p {
+  font-size: 1.1rem;
+  margin: 10px 0;
+}
+
+.courses-section table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.courses-section th,
+.courses-section td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.courses-section th {
+  background-color: #f0f0f0;
+}
+
+.courses-section tr:last-child td {
+  border-bottom: none;
+}
+
+.logout-link {
+  background-color: red;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  border-radius: 5px;
+}
+
+.logout-link:hover {
+  background-color: darkred;
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .dashboard-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .profile-section,
+  .courses-section {
+    width: 90%;
+    margin-bottom: 20px;
+  }
+}
