@@ -200,4 +200,8 @@ class Aluno extends \app\models\class\Aluno
             exit();
         }
     }
+
+    public function fetchPendentesC(){
+        return $this->fetchPendentes();
+    }
 }

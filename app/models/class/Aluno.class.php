@@ -145,4 +145,30 @@ class Aluno
         }
     }
 
+    protected function fetchPendentes(){
+        
+        $query = "SELECT * FROM aluno WHERE inscricao = 2";
+        $stmt = Conexao::openInstance()->connection->prepare($query);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $pendentes = [];
+        while ($row = $result->fetch_assoc()) {
+            $pendentes[] = $row;
+        }
+        Conexao::closeInstance();
+        return $pendentes;
+    }
+
+    protected function fetchAluno($cpf){
+        
+        $query = "SELECT * FROM aluno WHERE cpf =?";
+        $stmt = Conexao::openInstance()->connection->prepare($query);
+        $stmt->bind_param('s', $cpf);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $aluno = $result->fetch_assoc();
+        Conexao::closeInstance();
+        return $aluno;
+    }
+
 }

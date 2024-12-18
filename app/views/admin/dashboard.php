@@ -7,6 +7,10 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../../../public/css/templatemo-grad-school.css" rel="stylesheet">
+
+    <?php
+        require_once '../../../autoload.php';
+    ?>
 </head>
 
 <body class="bg-gray-100 h-screen flex overflow-hidden">
@@ -63,27 +67,34 @@
                         <!-- Placeholder para Dados -->
                         <?php
                         // Exemplo de consulta aos alunos pendentes. Substitua pela sua consulta real
-                        $alunos = [
-                            ['id' => 1, 'nome' => 'João Silva', 'email' => 'joao.silva@example.com', 'curso' => 'Engenharia', 'cpf' => '123.456.789-00', 'endereco' => 'Rua Exemplo, 123', 'status' => 'Aprovado'],
-                            ['id' => 2, 'nome' => 'Maria Oliveira', 'email' => 'maria.oliveira@example.com', 'curso' => 'Administração', 'cpf' => '987.654.321-00', 'endereco' => 'Av. Principal, 456', 'status' => 'Pendente'],
-                        ];
+                        $aluno = new \app\controllers\class\Aluno;
+                        $alunos = $aluno->fetchPendentesC();
 
                         foreach ($alunos as $aluno) {
+                            if ($aluno['inscricao'] == 2){
+                                $status = 'Pendente';
+                            }
+                            if ($aluno['inscricao'] == 1){
+                                $status = 'Aprovado';
+                            }
+                            if ($aluno['inscricao'] == 0){
+                                $status ='Rejeitado';
+                            }
                             ?>
                             <tr>
-                                <td class="px-4 py-2"><?= $aluno['id'] ?></td>
-                                <td class="px-4 py-2"><?= $aluno['nome'] ?></td>
+                                <td class="px-4 py-2"><?= $aluno['cod_aluno'] ?></td>
+                                <td class="px-4 py-2"><?= $aluno['nome_aluno'] ?></td>
                                 <td class="px-4 py-2"><?= $aluno['email'] ?></td>
                                 <td class="px-4 py-2"><?= $aluno['curso'] ?></td>
                                 <td class="px-4 py-2"><?= $aluno['cpf'] ?></td>
                                 <td class="px-4 py-2"><?= $aluno['endereco'] ?></td>
-                                <td class="px-4 py-2" data-status="<?= $aluno['status'] ?>">
-                                    <span class="bg-<?= $aluno['status'] == 'Aprovado' ? 'green' : ($aluno['status'] == 'Pendente' ? 'yellow' : 'red') ?>-200 text-<?= $aluno['status'] == 'Aprovado' ? 'green' : ($aluno['status'] == 'Pendente' ? 'yellow' : 'red') ?>-800 text-xs px-2 py-1 rounded-full"><?= $aluno['status'] ?></span>
+                                <td class="px-4 py-2" data-status="<?= $status ?>">
+                                    <span class="bg-<?= $status == 'Aprovado' ? 'green' : ($status == 'Pendente' ? 'yellow' : 'red') ?>-200 text-<?= $status == 'Aprovado' ? 'green' : ($status == 'Pendente' ? 'yellow' : 'red') ?>-800 text-xs px-2 py-1 rounded-full"><?= $status ?></span>
                                 </td>
                                 <td class="px-4 py-2">
-                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Aprovado" class="text-blue-500 hover:underline mr-2">Aprovar</a>
-                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Pendente" class="text-yellow-500 hover:underline mr-2">Pendente</a>
-                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Rejeitado" class="text-red-500 hover:underline">Rejeitar</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['cod_aluno'] ?>&status=Aprovado" class="text-blue-500 hover:underline mr-2">Aprovar</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['cod_aluno'] ?>&status=Pendente" class="text-yellow-500 hover:underline mr-2">Pendente</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['cod_aluno'] ?>&status=Rejeitado" class="text-red-500 hover:underline">Rejeitar</a>
                                 </td>
                             </tr>
                             <?php
