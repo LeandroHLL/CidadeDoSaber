@@ -1,11 +1,10 @@
 <?php
-session_start(); // Certifique-se de iniciar a sessão
+session_start();
 require_once '../../models/class/AdminQuery.php';
 require_once '../../controllers/class/AdminQueryController.php';
 
 $controller = new AdminQueryController();
 
-// Carregar os alunos
 $alunos = $controller->getAlunos();
 ?>
 

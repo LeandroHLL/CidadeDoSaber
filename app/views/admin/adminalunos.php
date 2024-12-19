@@ -1,7 +1,6 @@
 <?php
 $pdo = new PDO('mysql:host=localhost;dbname=educanet', 'root', '123456cds');
 
-// Consulta SQL para encontrar alunos e cadastros com o mesmo email
 $sql = "
     SELECT 
         a.cod_aluno, 
