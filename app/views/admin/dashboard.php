@@ -1,4 +1,42 @@
-<html>
+<?php
+$host = "localhost";
+$user = "root";
+$password = "123456cds";
+$database = "educanet";
+
+$conn = new mysqli($host, $user, $password, $database);
+
+if ($conn->connect_error) {
+    die("Erro de conexão: " . $conn->connect_error);
+}
+
+$sql = "
+    SELECT 
+        ac.id AS id_matricula,
+        cad.username AS nome,
+        cad.email,
+        (SELECT nome_curso FROM curso WHERE cod_curso = ac.cod_curso) AS curso_nome,
+        cad.phone_number AS cpf,
+        cad.age AS endereco,
+        ac.situacao AS status
+    FROM aluno_curso ac
+    JOIN cadastro cad ON ac.id_cadastro = cad.id
+";
+
+$result = $conn->query($sql);
+$alunos = [];
+
+if ($result && $result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $alunos[] = $row;
+    }
+}
+
+$conn->close();
+?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
@@ -10,7 +48,6 @@
 </head>
 
 <body class="bg-gray-100 h-screen flex overflow-hidden">
-
     <header class="main-header clearfix" role="header">
         <div class="logo">
             <a href="../../../index.html"><em>Educa</em> Net</a>
@@ -36,9 +73,9 @@
                 <input id="search" type="text" placeholder="Buscar..." class="w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
                 <select id="filter" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
                     <option value="">Filtrar por Status</option>
-                    <option value="Aprovado">Aprovado</option>
-                    <option value="Pendente">Pendente</option>
-                    <option value="Rejeitado">Rejeitado</option>
+                    <option value="pendente">Pendente</option>
+                    <option value="concluida">Concluida</option>
+                    <option value="cancelada">Cancelada</option>
                 </select>
             </div>
         </div>
@@ -54,41 +91,25 @@
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Email</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Curso</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">CPF</th>
-                            <th class="px-4 py-2 text-sm font-medium text-gray-600">Endereço</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Status</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- Placeholder para Dados -->
-                        <?php
-                        // Exemplo de consulta aos alunos pendentes. Substitua pela sua consulta real
-                        $alunos = [
-                            ['id' => 1, 'nome' => 'João Silva', 'email' => 'joao.silva@example.com', 'curso' => 'Engenharia', 'cpf' => '123.456.789-00', 'endereco' => 'Rua Exemplo, 123', 'status' => 'Aprovado'],
-                            ['id' => 2, 'nome' => 'Maria Oliveira', 'email' => 'maria.oliveira@example.com', 'curso' => 'Administração', 'cpf' => '987.654.321-00', 'endereco' => 'Av. Principal, 456', 'status' => 'Pendente'],
-                        ];
-
-                        foreach ($alunos as $aluno) {
-                        ?>
+                        <?php foreach ($alunos as $aluno) : ?>
                             <tr>
-                                <td class="px-4 py-2"><?= $aluno['id'] ?></td>
-                                <td class="px-4 py-2"><?= $aluno['nome'] ?></td>
-                                <td class="px-4 py-2"><?= $aluno['email'] ?></td>
-                                <td class="px-4 py-2"><?= $aluno['curso'] ?></td>
-                                <td class="px-4 py-2"><?= $aluno['cpf'] ?></td>
-                                <td class="px-4 py-2"><?= $aluno['endereco'] ?></td>
-                                <td class="px-4 py-2" data-status="<?= $aluno['status'] ?>">
-                                    <span class="bg-<?= $aluno['status'] == 'Aprovado' ? 'green' : ($aluno['status'] == 'Pendente' ? 'yellow' : 'red') ?>-200 text-<?= $aluno['status'] == 'Aprovado' ? 'green' : ($aluno['status'] == 'Pendente' ? 'yellow' : 'red') ?>-800 text-xs px-2 py-1 rounded-full"><?= $aluno['status'] ?></span>
-                                </td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['id_matricula']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['nome']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['email']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['curso_nome']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['cpf']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['status']) ?></td>
                                 <td class="px-4 py-2">
-                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Aprovado" class="text-blue-500 hover:underline mr-2">Aprovar</a>
-                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Pendente" class="text-yellow-500 hover:underline mr-2">Pendente</a>
-                                    <a href="atualizar_status.php?id=<?= $aluno['id'] ?>&status=Rejeitado" class="text-red-500 hover:underline">Rejeitar</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['id_matricula'] ?>&status=ativo" class="text-blue-500 hover:underline">Ativar</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['id_matricula'] ?>&status=inativo" class="text-red-500 hover:underline">Desativar</a>
                                 </td>
                             </tr>
-                        <?php
-                        }
-                        ?>
+                        <?php endforeach; ?>
                     </tbody>
                 </table>
             </div>
@@ -104,20 +125,16 @@
 
             function filterTable() {
                 const searchText = searchInput.value.toLowerCase();
-                const filterStatus = filterSelect.value;
+                const filterStatus = filterSelect.value.toLowerCase();
 
                 rows.forEach(row => {
                     const rowText = row.textContent.toLowerCase();
-                    const rowStatus = row.querySelector('[data-status]').getAttribute('data-status');
+                    const rowStatus = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
 
                     const matchesSearch = rowText.includes(searchText);
                     const matchesFilter = !filterStatus || rowStatus === filterStatus;
 
-                    if (matchesSearch && matchesFilter) {
-                        row.style.display = '';
-                    } else {
-                        row.style.display = 'none';
-                    }
+                    row.style.display = matchesSearch && matchesFilter ? '' : 'none';
                 });
             }
 
