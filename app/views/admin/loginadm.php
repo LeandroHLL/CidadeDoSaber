@@ -11,9 +11,9 @@
 <body class="align">
 
     <div class="grid">
-        <!-- Formulário de login -->
+
         <form method="POST" action="../../controllers/adminLogin.php" class="form login">
-            <!-- Mensagem de erro -->
+
             <?php
             session_start();
             if (isset($_SESSION['error'])): ?>
@@ -23,15 +23,12 @@
                 <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
-            <!-- Campo de Usuário -->
             <div class="form__field">
                 <label for="login__username"><svg class="icon">
                         <use xlink:href="#icon-user"></use>
                     </svg><span class="hidden">Usuário</span></label>
                 <input autocomplete="username" id="login__username" type="text" name="username" class="form__input" placeholder="Usuário" required>
             </div>
-
-            <!-- Campo de Senha -->
             <div class="form__field">
                 <label for="login__password"><svg class="icon">
                         <use xlink:href="#icon-lock"></use>
@@ -39,14 +36,11 @@
                 <input id="login__password" type="password" name="password" class="form__input" placeholder="Senha" required>
             </div>
 
-            <!-- Botão de Enviar -->
             <div class="form__field">
                 <input type="submit" name="action" value="Login">
             </div>
         </form>
 
-        <!-- Link para recuperação de senha -->
-        <p class="text--center">Esqueceu a senha? <a href="#">Recuperar agora</a></p>
     </div>
 
     <!-- Ícones -->

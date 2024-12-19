@@ -10,7 +10,7 @@
 </head>
 
 <body class="bg-gray-100 h-screen flex overflow-hidden">
-    <!-- Novo header inserido diretamente -->
+
     <header class="main-header clearfix" role="header">
         <div class="logo">
             <a href="../../../index.html"><em>Educa</em> Net</a>
