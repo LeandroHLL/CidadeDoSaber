@@ -148,14 +148,17 @@ $total_matriculas = $row_contagem['total'];
                     $desabilitar = $total_matriculas >= 2 || $ja_matriculado;
                     ?>
 
-                    <div class="curso <?php echo $desabilitar ? 'desabilitado' : ''; ?>"
-                        onclick="<?php echo $desabilitar ? '' : 'abrirMatricula(' . $curso['cod_curso'] . ')'; ?>">
+                    <div class="curso <?php echo $desabilitar ? 'desabilitado' : ''; ?> <?php echo $total_senhas == 0 ? 'sem-vagas' : ''; ?>"
+                        onclick="<?php echo ($desabilitar || $total_senhas == 0) ? '' : 'abrirMatricula(' . $curso['cod_curso'] . ')'; ?>">
                         <h3><?php echo htmlspecialchars($curso_nome); ?></h3>
                         <p><strong>Informações:</strong> <?php echo htmlspecialchars($curso['informacoes_curso']); ?></p>
                         <p><strong>Coordenação:</strong> <?php echo htmlspecialchars($curso['nome_coordenacao']); ?></p>
                         <p><strong>Vagas disponíveis:</strong> <?php echo $total_senhas; ?></p>
                         <?php if ($desabilitar): ?>
                             <p style="color: red;">Já cadastrado</p>
+                        <?php endif; ?>
+                        <?php if ($total_senhas == 0): ?>
+                            <p style="color: gray;">Sem vagas disponíveis</p>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>

@@ -177,3 +177,13 @@ h1 {
 .filtro-button:hover {
     background-color: #e08724;
 }
+.cursos-container .curso.sem-vagas {
+    background-color: #d3d3d3 !important; /* Força a cor cinza */
+    cursor: not-allowed;                  /* Altera o cursor */
+    opacity: 0.6;                         /* Reduz opacidade */
+    pointer-events: none;                 /* Desativa cliques */
+}
+
+.cursos-container .curso.sem-vagas:hover {
+    background-color: #d3d3d3 !important; /* Mantém cinza ao passar o mouse */
+}
