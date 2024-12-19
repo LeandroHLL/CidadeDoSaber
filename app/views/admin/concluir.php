@@ -1,3 +1,15 @@
+<?php
+// Verifica se os parâmetros de URL foram passados corretamente
+if (isset($_GET['id']) && isset($_GET['nome']) && isset($_GET['email'])) {
+    $id_matricula = $_GET['id'];
+    $nome = $_GET['nome'];
+    $email = $_GET['email'];
+} else {
+    // Caso algum parâmetro esteja ausente, redireciona para a página anterior
+    header("Location: dashboard.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -11,98 +23,105 @@
 <body class="align">
 
     <div class="grid">
-        <form method="POST" action="../../controllers/adminCadastroAluno.php" class="form login">
+        <form method="POST" action="adminCadastroAluno.php" class="form login">
             <h2>Cadastro de Aluno</h2>
 
             <!-- Mensagem de erro (se houver) -->
-            <?php
-            session_start();
-            if (isset($_SESSION['error'])): ?>
+            <!-- Mensagem de erro (se houver) -->
+            <?php if (isset($_SESSION['error'])): ?>
                 <div class="error-message">
                     <?= $_SESSION['error']; ?>
                 </div>
                 <?php unset($_SESSION['error']); ?>
             <?php endif; ?>
 
+            <!-- Mensagem de sucesso (se houver) -->
+            <?php if (isset($_SESSION['success'])): ?>
+                <div class="success-message">
+                    <?= $_SESSION['success']; ?>
+                </div>
+                <?php unset($_SESSION['success']); ?>
+            <?php endif; ?>
+
             <!-- Nome do aluno -->
             <div class="form__field">
-                <label for="nome_aluno">Nome do Aluno</label>
-                <input id="nome_aluno" type="text" name="nome_aluno" class="form__input" placeholder="Nome do Aluno" required>
+                <label for="nome_aluno">Nome Completo*</label>
+                <input id="nome_aluno" type="text" name="nome_aluno" class="form__input" placeholder="Nome do Aluno" value="<?= isset($nome) ? $nome : '' ?>" required>
             </div>
 
             <!-- Data de nascimento -->
             <div class="form__field">
-                <label for="data_nascimento">Data de Nascimento</label>
-                <input id="data_nascimento" type="date" name="data_nascimento" class="form__input" required>
+                <label for="data_nascimento">Data de Nascimento*</label>
+                <input id="data_nascimento" type="date" name="data_nascimento" class="form__input" value="<?= isset($_POST['data_nascimento']) ? $_POST['data_nascimento'] : '' ?>" required>
             </div>
 
             <!-- Nome do Pai -->
             <div class="form__field">
                 <label for="nome_pai">Nome do Pai</label>
-                <input id="nome_pai" type="text" name="nome_pai" class="form__input" placeholder="Nome do Pai" required>
+                <input id="nome_pai" type="text" name="nome_pai" class="form__input" placeholder="Nome do Pai" value="<?= isset($_POST['nome_pai']) ? $_POST['nome_pai'] : '' ?>" required>
             </div>
 
             <!-- Nome da Mãe -->
             <div class="form__field">
                 <label for="nome_mae">Nome da Mãe</label>
-                <input id="nome_mae" type="text" name="nome_mae" class="form__input" placeholder="Nome da Mãe" required>
+                <input id="nome_mae" type="text" name="nome_mae" class="form__input" placeholder="Nome da Mãe" value="<?= isset($_POST['nome_mae']) ? $_POST['nome_mae'] : '' ?>" required>
             </div>
 
             <!-- Sexo -->
             <div class="form__field">
-                <label for="sexo">Sexo</label>
+                <label for="sexo">Sexo*</label>
                 <select id="sexo" name="sexo" class="form__input" required>
                     <option value="">Selecione</option>
-                    <option value="Masculino">Masculino</option>
-                    <option value="Feminino">Feminino</option>
-                    <option value="Outro">Outro</option>
+                    <option value="Masculino" <?= isset($_POST['sexo']) && $_POST['sexo'] == 'Masculino' ? 'selected' : '' ?>>Masculino</option>
+                    <option value="Feminino" <?= isset($_POST['sexo']) && $_POST['sexo'] == 'Feminino' ? 'selected' : '' ?>>Feminino</option>
+                    <option value="Outro" <?= isset($_POST['sexo']) && $_POST['sexo'] == 'Outro' ? 'selected' : '' ?>>Outro</option>
                 </select>
             </div>
 
             <!-- CPF -->
             <div class="form__field">
-                <label for="cpf">CPF</label>
-                <input id="cpf" type="text" name="cpf" class="form__input" placeholder="CPF" required>
+                <label for="cpf">CPF*</label>
+                <input id="cpf" type="text" name="cpf" class="form__input" placeholder="CPF" value="<?= isset($_POST['cpf']) ? $_POST['cpf'] : '' ?>" required>
             </div>
 
             <!-- Email -->
             <div class="form__field">
-                <label for="email">Email</label>
-                <input id="email" type="email" name="email" class="form__input" placeholder="Email" required>
+                <label for="email">Email*</label>
+                <input id="email" type="email" name="email" class="form__input" placeholder="Email" value="<?= isset($email) ? $email : '' ?>" required>
             </div>
 
             <!-- Telefone Celular -->
             <div class="form__field">
-                <label for="telefone_celular">Telefone Celular</label>
-                <input id="telefone_celular" type="text" name="telefone_celular" class="form__input" placeholder="Telefone Celular" required>
+                <label for="telefone_celular">Telefone Celular*</label>
+                <input id="telefone_celular" type="text" name="telefone_celular" class="form__input" placeholder="Telefone Celular" value="<?= isset($_POST['telefone_celular']) ? $_POST['telefone_celular'] : '' ?>" required>
             </div>
 
             <!-- Endereço -->
             <div class="form__field">
-                <label for="endereco">Endereço</label>
-                <input id="endereco" type="text" name="endereco" class="form__input" placeholder="Endereço" required>
+                <label for="endereco">Endereço*</label>
+                <input id="endereco" type="text" name="endereco" class="form__input" placeholder="Endereço" value="<?= isset($_POST['endereco']) ? $_POST['endereco'] : '' ?>" required>
             </div>
 
             <!-- Número do Endereço -->
             <div class="form__field">
-                <label for="numero_endereco">Número do Endereço</label>
-                <input id="numero_endereco" type="text" name="numero_endereco" class="form__input" placeholder="Número do Endereço" required>
+                <label for="numero_endereco">Número do Endereço*</label>
+                <input id="numero_endereco" type="text" name="numero_endereco" class="form__input" placeholder="Número do Endereço" value="<?= isset($_POST['numero_endereco']) ? $_POST['numero_endereco'] : '' ?>" required>
             </div>
 
             <!-- Escolaridade -->
             <div class="form__field">
-                <label for="serie_escolar">Série Escolar</label>
-                <input id="serie_escolar" type="text" name="serie_escolar" class="form__input" placeholder="Série Escolar" required>
+                <label for="serie_escolar">Série Escolar*</label>
+                <input id="serie_escolar" type="text" name="serie_escolar" class="form__input" placeholder="Série Escolar" value="<?= isset($_POST['serie_escolar']) ? $_POST['serie_escolar'] : '' ?>" required>
             </div>
 
             <!-- Turno Escolar -->
             <div class="form__field">
-                <label for="turno_escolar">Turno Escolar</label>
+                <label for="turno_escolar">Turno Escolar*</label>
                 <select id="turno_escolar" name="turno_escolar" class="form__input" required>
                     <option value="">Selecione</option>
-                    <option value="Manhã">Manhã</option>
-                    <option value="Tarde">Tarde</option>
-                    <option value="Noite">Noite</option>
+                    <option value="Manhã" <?= isset($_POST['turno_escolar']) && $_POST['turno_escolar'] == 'Manhã' ? 'selected' : '' ?>>Manhã</option>
+                    <option value="Tarde" <?= isset($_POST['turno_escolar']) && $_POST['turno_escolar'] == 'Tarde' ? 'selected' : '' ?>>Tarde</option>
+                    <option value="Noite" <?= isset($_POST['turno_escolar']) && $_POST['turno_escolar'] == 'Noite' ? 'selected' : '' ?>>Noite</option>
                 </select>
             </div>
 
@@ -110,30 +129,30 @@
             <div class="form__field">
                 <label for="possui_alergia">Possui Alergia?</label>
                 <select id="possui_alergia" name="possui_alergia" class="form__input" required>
-                    <option value="Não">Não</option>
-                    <option value="Sim">Sim</option>
+                    <option value="Não" <?= isset($_POST['possui_alergia']) && $_POST['possui_alergia'] == 'Não' ? 'selected' : '' ?>>Não</option>
+                    <option value="Sim" <?= isset($_POST['possui_alergia']) && $_POST['possui_alergia'] == 'Sim' ? 'selected' : '' ?>>Sim</option>
                 </select>
             </div>
 
             <!-- Qual Alergia -->
             <div class="form__field">
                 <label for="qual_alergia">Qual Alergia?</label>
-                <input id="qual_alergia" type="text" name="qual_alergia" class="form__input" placeholder="Qual Alergia?" required>
+                <input id="qual_alergia" type="text" name="qual_alergia" class="form__input" placeholder="Qual Alergia?" value="<?= isset($_POST['qual_alergia']) ? $_POST['qual_alergia'] : '' ?>" required>
             </div>
 
             <!-- Ex-Aluno -->
             <div class="form__field">
                 <label for="ex_aluno">Ex-Aluno?</label>
                 <select id="ex_aluno" name="ex_aluno" class="form__input" required>
-                    <option value="Não">Não</option>
-                    <option value="Sim">Sim</option>
+                    <option value="Não" <?= isset($_POST['ex_aluno']) && $_POST['ex_aluno'] == 'Não' ? 'selected' : '' ?>>Não</option>
+                    <option value="Sim" <?= isset($_POST['ex_aluno']) && $_POST['ex_aluno'] == 'Sim' ? 'selected' : '' ?>>Sim</option>
                 </select>
             </div>
 
             <!-- Observações -->
             <div class="form__field">
                 <label for="obs">Observações</label>
-                <textarea id="obs" name="obs" class="form__input" placeholder="Observações"></textarea>
+                <textarea id="obs" name="obs" class="form__input" placeholder="Observações"><?= isset($_POST['obs']) ? $_POST['obs'] : '' ?></textarea>
             </div>
 
             <!-- Submit -->
@@ -141,7 +160,6 @@
                 <input type="submit" name="action" value="Cadastrar">
             </div>
         </form>
-
     </div>
 
     <!-- Ícones -->

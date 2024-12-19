@@ -79,11 +79,12 @@ $alunos = $controller->getAlunos();
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['status']) ?></td>
                                 <td class="px-4 py-2">
                                     <?php if ($aluno['status'] != 'concluida' && $aluno['status'] != 'cancelada'): ?>
-                                        <a href="atualizar_status.php?id=<?= $aluno['id_matricula'] ?>&status=ativo" class="text-blue-500 hover:underline">Concluir Cadastro</a>
+                                        <a href="concluir.php?id=<?= $aluno['id_matricula'] ?>&nome=<?= urlencode($aluno['nome']) ?>&email=<?= urlencode($aluno['email']) ?>" class="text-blue-500 hover:underline">Concluir Cadastro</a>
                                         <a href="cancelar.php?id=<?= $aluno['id_matricula'] ?>" class="text-red-500 hover:underline">Cancelar Cadastro</a>
                                     <?php else: ?>
                                         <span class="text-gray-500">Ação indisponível</span>
                                     <?php endif; ?>
+
                                 </td>
                             </tr>
                         <?php endforeach; ?>
