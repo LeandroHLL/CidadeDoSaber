@@ -7,6 +7,10 @@ $sql = "
         a.nome_aluno, 
         a.email, 
         a.cpf,       
+        a.telefone_celular,
+        a.data_nascimento,
+        a.endereco,
+        a.numero_endereco,
         c.username, 
         c.age, 
         c.phone_number
@@ -19,8 +23,6 @@ $stmt = $pdo->prepare($sql);
 $stmt->execute();
 
 $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-
 ?>
 
 <!DOCTYPE html>
@@ -62,7 +64,7 @@ $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <select id="filter" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
                     <option value="">Filtrar por Status</option>
                     <option value="pendente">Pendente</option>
-                    <option value="concluida">Concluída</option>
+                    <option value="concluída">Concluída</option>
                     <option value="cancelada">Cancelada</option>
                 </select>
             </div>
@@ -78,6 +80,10 @@ $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Nome Aluno</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Email</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">CPF</th>
+                            <th class="px-4 py-2 text-sm font-medium text-gray-600">Telefone Celular</th>
+                            <th class="px-4 py-2 text-sm font-medium text-gray-600">Data de Nascimento</th>
+                            <th class="px-4 py-2 text-sm font-medium text-gray-600">Endereço</th>
+                            <th class="px-4 py-2 text-sm font-medium text-gray-600">N do Endereço</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Ações</th>
                         </tr>
                     </thead>
@@ -88,8 +94,12 @@ $alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['nome_aluno']) ?></td>
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['email']) ?></td>
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['cpf']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['telefone_celular']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['data_nascimento']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['endereco']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['numero_endereco']) ?></td>
                                 <td class="px-4 py-2">
-                                    <a href="atualizar_status.php?id=<?= $aluno['cod_aluno'] ?>&status=ativo" class="text-green-500 hover:underline">Editar Matriculado</a>
+                                    <a href="editar_matriculado.php?id=<?= $aluno['cod_aluno'] ?>&status=ativo" class="text-green-500 hover:underline">Editar Matriculado</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
