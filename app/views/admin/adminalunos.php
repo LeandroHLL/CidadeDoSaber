@@ -6,7 +6,7 @@ $sql = "
         a.cod_aluno, 
         a.nome_aluno, 
         a.email, 
-        a.cpf,         -- Garantir que o campo cpf está sendo buscado da tabela 'aluno'
+        a.cpf,       
         c.username, 
         c.age, 
         c.phone_number
