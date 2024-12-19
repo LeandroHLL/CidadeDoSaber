@@ -24,7 +24,6 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $id_cadastro = $row['id'];
 
-    // Verificar o número de cursos matriculados
     $sql_check_matriculas = "SELECT COUNT(*) AS total FROM aluno_curso WHERE id_cadastro = ?";
     $stmt_check = $conn->prepare($sql_check_matriculas);
     $stmt_check->bind_param("i", $id_cadastro);
@@ -33,14 +32,12 @@ if ($result->num_rows > 0) {
     $row_check = $result_check->fetch_assoc();
     $total_cursos = $row_check['total'];
 
-    // Impedir matrícula se já tiver 2 cursos
     if ($total_cursos >= 2) {
         $_SESSION['error_message'] = "Você já está matriculado em 2 cursos. Não é possível adicionar mais.";
         header("Location: ../../views/aluno/cursos.php");
         exit;
     }
 
-    // Verificar se já está matriculado no mesmo curso
     $sql_check_duplicado = "SELECT * FROM aluno_curso WHERE id_cadastro = ? AND cod_curso = ?";
     $stmt_duplicado = $conn->prepare($sql_check_duplicado);
     $stmt_duplicado->bind_param("ii", $id_cadastro, $cod_curso);
@@ -53,7 +50,6 @@ if ($result->num_rows > 0) {
         exit;
     }
 
-    // Buscar uma senha disponível com base na lógica de junção
     $sql_find_senha = "
     SELECT senha.cod_senha, senha.autenticacao, curso.cod_curso
     FROM senha
@@ -65,9 +61,8 @@ if ($result->num_rows > 0) {
     AND curso.cod_curso = ?
     LIMIT 1";
 
-    // Preparar e executar a consulta com o código do curso
     $stmt_senha = $conn->prepare($sql_find_senha);
-    $stmt_senha->bind_param("i", $cod_curso); // Passar o código do curso como parâmetro
+    $stmt_senha->bind_param("i", $cod_curso);
     $stmt_senha->execute();
     $result_senha = $stmt_senha->get_result();
 
@@ -76,7 +71,6 @@ if ($result->num_rows > 0) {
         $cod_senha = $row_senha['cod_senha'];
         $autenticacao = $row_senha['autenticacao'];
 
-        // Inserir a matrícula na tabela aluno_curso (agora com o id_cadastro)
         $sql_insert_matricula = "
         INSERT INTO aluno_curso (id_cadastro, cod_curso, data_matricula, status, informacoes)
         VALUES (?, ?, CURDATE(), 'ativo', ?)";
@@ -95,7 +89,6 @@ if ($result->num_rows > 0) {
         $_SESSION['error_message'] = "Não há senhas disponíveis no momento para este curso e período letivo.";
     }
 
-    // Fechar o statement da senha
     $stmt_senha->close();
 } else {
     $_SESSION['error_message'] = "E-mail não encontrado!";
@@ -105,6 +98,5 @@ if ($result->num_rows > 0) {
 $stmt->close();
 $conn->close();
 
-// Redirecionar de volta para a página de cursos
 header("Location: ../../views/aluno/cursos.php");
 exit;
