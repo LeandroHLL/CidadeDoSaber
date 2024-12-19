@@ -116,7 +116,6 @@ $conn->close();
       <p><strong>Nome de Usuário:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
       <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
       <p><strong>Telefone:</strong> <?php echo htmlspecialchars($usuario['phone_number']); ?></p>
-      <p><strong>Idade:</strong> <?php echo htmlspecialchars($usuario['age']); ?> anos</p>
     </div>
 
     <!-- Meus Cursos -->
@@ -181,6 +180,14 @@ $conn->close();
         width="100%" height="422px" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
       </iframe>
     </div>
+  </div>
+  <div class="contact-info">
+    <h2>Informações para Contato</h2>
+    <p><strong>Endereço:</strong> R. do Telégrafo, s/n - Centro, Camaçari - BA, 42802-721</p>
+    <p><strong>Horário:</strong> Fechado ⋅ Abre às 08:00</p>
+    <p><strong>Site:</strong> <a href="https://secult.camacari.ba.gov.br" target="_blank">secult.camacari.ba.gov.br</a></p>
+    <p><strong>Telefone:</strong> <a href="tel:+557136449824">(71) 3644-9824</a></p>
+    <p><strong>Referência Plus Code:</strong>  R. do Telégrafo, s/n - Centro, Camaçari - BA</p>
   </div>
 
   </div>
