@@ -1,38 +1,11 @@
 <?php
-$host = "localhost";
-$user = "root";
-$password = "123456cds";
-$database = "educanet";
 
-$conn = new mysqli($host, $user, $password, $database);
+require_once '../../models/class/AdminQuery.php';
+require_once '../../controllers/class/AdminQueryController.php';
 
-if ($conn->connect_error) {
-    die("Erro de conexão: " . $conn->connect_error);
-}
+$controller = new AdminQueryController();
 
-$sql = "
-    SELECT 
-        ac.id AS id_matricula,
-        cad.username AS nome,
-        cad.email,
-        (SELECT nome_curso FROM curso WHERE cod_curso = ac.cod_curso) AS curso_nome,
-        cad.phone_number AS cpf,
-        cad.age AS endereco,
-        ac.situacao AS status
-    FROM aluno_curso ac
-    JOIN cadastro cad ON ac.id_cadastro = cad.id
-";
-
-$result = $conn->query($sql);
-$alunos = [];
-
-if ($result && $result->num_rows > 0) {
-    while ($row = $result->fetch_assoc()) {
-        $alunos[] = $row;
-    }
-}
-
-$conn->close();
+$alunos = $controller->getAlunos();
 ?>
 
 <!DOCTYPE html>
@@ -132,9 +105,13 @@ $conn->close();
                     const rowStatus = row.querySelector('td:nth-child(6)').textContent.toLowerCase();
 
                     const matchesSearch = rowText.includes(searchText);
-                    const matchesFilter = !filterStatus || rowStatus === filterStatus;
+                    const matchesFilter = !filterStatus || rowStatus.includes(filterStatus);
 
-                    row.style.display = matchesSearch && matchesFilter ? '' : 'none';
+                    if (matchesSearch && matchesFilter) {
+                        row.style.display = '';
+                    } else {
+                        row.style.display = 'none';
+                    }
                 });
             }
 
