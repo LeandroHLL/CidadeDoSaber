@@ -21,3 +21,23 @@ DROP FOREIGN KEY `aluno_curso_ibfk_1`;
 
 ALTER TABLE `aluno_curso`
 ADD CONSTRAINT `aluno_curso_fk_id_cadastro` FOREIGN KEY (`id_cadastro`) REFERENCES `cadastro` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+ALTER TABLE aluno_curso
+ADD COLUMN situacao VARCHAR(20) NOT NULL;
+
+DELIMITER //
+
+CREATE TRIGGER update_situacao_aluno_curso
+AFTER UPDATE ON senha
+FOR EACH ROW
+BEGIN
+    UPDATE aluno_curso
+    SET situacao = NEW.situacao
+    WHERE informacoes = NEW.autenticacao;
+END//
+
+DELIMITER ;
+
+ALTER TABLE cadastro
+MODIFY email VARCHAR(255) NOT NULL UNIQUE;
+

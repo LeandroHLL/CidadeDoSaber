@@ -10,8 +10,14 @@ if ($conn->connect_error) {
 }
 
 // Receber os dados do formulário
-$email_aluno = $_POST['email_aluno'];
-$cod_curso = $_POST['cod_curso'];
+$email_aluno = $_POST['email_aluno'] ?? ''; // Garantir que a variável não seja nula
+
+// Verificar se o e-mail não está vazio
+if (empty($email_aluno)) {
+    $_SESSION['error_message'] = "O campo de e-mail não pode estar vazio.";
+    header("Location: ../../views/aluno/cursos.php");
+    exit;
+}
 
 // Verificar se o e-mail existe
 $sql_check_email = "SELECT id FROM cadastro WHERE email = ?";
@@ -24,6 +30,7 @@ if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $id_cadastro = $row['id'];
 
+    // Verificar se o aluno já está matriculado em 2 cursos
     $sql_check_matriculas = "SELECT COUNT(*) AS total FROM aluno_curso WHERE id_cadastro = ?";
     $stmt_check = $conn->prepare($sql_check_matriculas);
     $stmt_check->bind_param("i", $id_cadastro);
@@ -38,6 +45,8 @@ if ($result->num_rows > 0) {
         exit;
     }
 
+    // Verificar se o aluno já está matriculado no mesmo curso
+    $cod_curso = $_POST['cod_curso']; // Adicionando o valor de cod_curso
     $sql_check_duplicado = "SELECT * FROM aluno_curso WHERE id_cadastro = ? AND cod_curso = ?";
     $stmt_duplicado = $conn->prepare($sql_check_duplicado);
     $stmt_duplicado->bind_param("ii", $id_cadastro, $cod_curso);
@@ -50,6 +59,7 @@ if ($result->num_rows > 0) {
         exit;
     }
 
+    // Buscar a senha disponível para o curso
     $sql_find_senha = "
     SELECT senha.cod_senha, senha.autenticacao, curso.cod_curso
     FROM senha
@@ -71,18 +81,28 @@ if ($result->num_rows > 0) {
         $cod_senha = $row_senha['cod_senha'];
         $autenticacao = $row_senha['autenticacao'];
 
+        // Inserir a matrícula do aluno no curso
         $sql_insert_matricula = "
-        INSERT INTO aluno_curso (id_cadastro, cod_curso, data_matricula, status, informacoes)
-        VALUES (?, ?, CURDATE(), 'ativo', ?)";
+        INSERT INTO aluno_curso (id_cadastro, cod_curso, data_matricula, status, informacoes, situacao)
+        VALUES (?, ?, CURDATE(), 'ativo', ?, 'PENDENTE')";
         $stmt_insert = $conn->prepare($sql_insert_matricula);
         $stmt_insert->bind_param("iis", $id_cadastro, $cod_curso, $autenticacao);
         $stmt_insert->execute();
 
-        // Atualizar o status da senha para "PENDENTE"
+        // Atualizar o status da senha para "PENDENTE" para este curso
         $sql_update_senha = "UPDATE senha SET situacao = 'PENDENTE' WHERE cod_senha = ?";
         $stmt_senha_update = $conn->prepare($sql_update_senha);
         $stmt_senha_update->bind_param("i", $cod_senha);
         $stmt_senha_update->execute();
+
+        // Atualizar o status para "PENDENTE" de todos os cursos matriculados do aluno
+        $sql_update_situacao_aluno_curso = "
+        UPDATE aluno_curso
+        SET situacao = 'PENDENTE'
+        WHERE id_cadastro = ? AND situacao = 'ativo'";
+        $stmt_update_situacao = $conn->prepare($sql_update_situacao_aluno_curso);
+        $stmt_update_situacao->bind_param("i", $id_cadastro);
+        $stmt_update_situacao->execute();
 
         $_SESSION['success_message'] = "Matrícula realizada com sucesso!";
     } else {
