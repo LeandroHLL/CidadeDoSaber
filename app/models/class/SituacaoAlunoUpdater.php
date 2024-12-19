@@ -22,20 +22,19 @@ class SituacaoAlunoUpdater
     {
         $conn = $this->conectar();
 
-        // Atualize a consulta para usar o campo 'id' que existe na sua tabela
-        $query = "UPDATE aluno_curso SET situacao = ? WHERE id = ?"; // Use 'id' como campo de busca
+        $query = "UPDATE aluno_curso SET situacao = ? WHERE id = ?";
         $stmt = $conn->prepare($query);
 
         if (!$stmt) {
             die("Erro na preparação da consulta: " . $conn->error);
         }
 
-        $stmt->bind_param("si", $novaSituacao, $idMatricula); // Aqui 'idMatricula' é um inteiro
+        $stmt->bind_param("si", $novaSituacao, $idMatricula);
 
         if ($stmt->execute()) {
-            $resultado = true; // Atualização bem-sucedida
+            $resultado = true;
         } else {
-            $resultado = false; // Falha na execução
+            $resultado = false;
         }
 
         $stmt->close();

@@ -4,7 +4,7 @@ require_once '../models/class/SituacaoAlunoUpdater.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verifique se os dados necessários estão presentes
     if (isset($_POST['id_aluno_curso']) && isset($_POST['situacao'])) {
-        $idMatricula = $_POST['id_aluno_curso']; // Corrigido o nome do campo
+        $idMatricula = $_POST['id_aluno_curso'];
         $novaSituacao = $_POST['situacao'];
 
         $updater = new SituacaoAlunoUpdater();
@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['error'] = "Dados inválidos.";
     }
 
-    // Redireciona para a página de administração após a atualização
     header("Location: ../views/admin/dashboard.php");
     exit();
 }
