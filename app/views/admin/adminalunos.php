@@ -14,7 +14,7 @@ $alunos = $controller->getAlunos();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Status de Matrícula</title>
+    <title>Alunos Matriculados</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <link href="../../../public/css/templatemo-grad-school.css" rel="stylesheet">
@@ -37,7 +37,7 @@ $alunos = $controller->getAlunos();
 
     <main class="flex-1 p-6 overflow-y-auto pt-20">
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-3xl font-bold">Status das Matrículas</h1>
+            <h1 class="text-3xl font-bold">Matriculados</h1>
         </div>
 
         <!-- Barra de Pesquisa e Filtro -->
