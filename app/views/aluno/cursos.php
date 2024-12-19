@@ -14,12 +14,37 @@ require_once __DIR__ . '/../../models/class/Curso.class.php';
 use app\models\class\Conexao;
 use app\models\class\Curso;
 
-// Obtém a instância da conexão
+
 $conn = Conexao::openInstance()->connection;
 
-// Certifique-se de que a classe Curso aceita a conexão no construtor
-$cursoModel = new Curso($conn);
+$sql_senhas_disponiveis = "
+    SELECT 
+        c.nome_curso AS curso, 
+        COUNT(s.cod_senha) AS senhas_disponiveis
+    FROM 
+        senha s
+    INNER JOIN 
+        turma t ON s.cod_turma = t.cod_turma
+    INNER JOIN 
+        modulo m ON t.cod_modulo = m.cod_modulo
+    INNER JOIN 
+        curso c ON m.cod_curso = c.cod_curso
+    WHERE 
+        s.situacao = 'disponivel'
+    GROUP BY 
+        c.nome_curso
+";
 
+$stmt_senhas = $conn->prepare($sql_senhas_disponiveis);
+$stmt_senhas->execute();
+$result_senhas = $stmt_senhas->get_result();
+
+$senhas_disponiveis = [];
+while ($row = $result_senhas->fetch_assoc()) {
+    $senhas_disponiveis[$row['curso']] = $row['senhas_disponiveis'];
+}
+
+$cursoModel = new Curso($conn);
 $categoriasCoordenacao = $cursoModel->getTodasCoordenacoes();
 
 $nomeCurso = $_POST['nome_curso'] ?? '';
@@ -31,7 +56,6 @@ if ($nomeCurso || $codCoordenacao) {
     $cursos = $cursoModel->getCursos();
 }
 
-// Verificar o número de cursos matriculados pelo usuário
 $sql_contagem = "SELECT COUNT(*) AS total FROM cadastro WHERE id = ? AND curso IS NOT NULL";
 $stmt_contagem = $conn->prepare($sql_contagem);
 $stmt_contagem->bind_param("i", $user['id']);
@@ -40,6 +64,7 @@ $result_contagem = $stmt_contagem->get_result();
 $row_contagem = $result_contagem->fetch_assoc();
 $total_matriculas = $row_contagem['total'];
 ?>
+
 <!DOCTYPE html>
 <html lang="pt-br">
 
@@ -111,6 +136,9 @@ $total_matriculas = $row_contagem['total'];
             <?php else: ?>
                 <?php foreach ($cursos as $curso): ?>
                     <?php
+                    $curso_nome = $curso['nome_curso'];
+                    $total_senhas = $senhas_disponiveis[$curso_nome] ?? 0;
+
                     $sql_verificar = "SELECT * FROM cadastro WHERE id = ? AND curso = ?";
                     $stmt_verificar = $conn->prepare($sql_verificar);
                     $stmt_verificar->bind_param("ii", $user['id'], $curso['cod_curso']);
@@ -122,11 +150,12 @@ $total_matriculas = $row_contagem['total'];
 
                     <div class="curso <?php echo $desabilitar ? 'desabilitado' : ''; ?>"
                         onclick="<?php echo $desabilitar ? '' : 'abrirMatricula(' . $curso['cod_curso'] . ')'; ?>">
-                        <h3><?php echo htmlspecialchars($curso['nome_curso']); ?></h3>
+                        <h3><?php echo htmlspecialchars($curso_nome); ?></h3>
                         <p><strong>Informações:</strong> <?php echo htmlspecialchars($curso['informacoes_curso']); ?></p>
                         <p><strong>Coordenação:</strong> <?php echo htmlspecialchars($curso['nome_coordenacao']); ?></p>
+                        <p><strong>Vagas disponíveis:</strong> <?php echo $total_senhas; ?></p>
                         <?php if ($desabilitar): ?>
-                            <p style="color: red;">Indisponível</p>
+                            <p style="color: red;">Já cadastrado</p>
                         <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
