@@ -36,7 +36,7 @@ if (isset($_GET['id'])) {
         }
 
 
-        $sql_aluno_curso = "UPDATE aluno_curso SET situacao = 'cancelada' WHERE id = ?";
+        $sql_aluno_curso = "UPDATE aluno_curso SET situacao = 'CANCELADA' WHERE id = ?";
         $stmt_aluno_curso = $conn->prepare($sql_aluno_curso);
         $stmt_aluno_curso->bind_param("i", $id_matricula);
         if (!$stmt_aluno_curso->execute()) {
