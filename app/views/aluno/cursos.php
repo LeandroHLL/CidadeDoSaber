@@ -14,7 +14,11 @@ require_once __DIR__ . '/../../models/class/Curso.class.php';
 use app\models\class\Conexao;
 use app\models\class\Curso;
 
-$cursoModel = new Curso();
+// Obtém a instância da conexão
+$conn = Conexao::openInstance()->connection;
+
+// Certifique-se de que a classe Curso aceita a conexão no construtor
+$cursoModel = new Curso($conn);
 
 $categoriasCoordenacao = $cursoModel->getTodasCoordenacoes();
 
@@ -26,10 +30,19 @@ if ($nomeCurso || $codCoordenacao) {
 } else {
     $cursos = $cursoModel->getCursos();
 }
-?>
 
+// Verificar o número de cursos matriculados pelo usuário
+$sql_contagem = "SELECT COUNT(*) AS total FROM cadastro WHERE id = ? AND curso IS NOT NULL";
+$stmt_contagem = $conn->prepare($sql_contagem);
+$stmt_contagem->bind_param("i", $user['id']);
+$stmt_contagem->execute();
+$result_contagem = $stmt_contagem->get_result();
+$row_contagem = $result_contagem->fetch_assoc();
+$total_matriculas = $row_contagem['total'];
+?>
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,6 +50,7 @@ if ($nomeCurso || $codCoordenacao) {
     <link rel="stylesheet" href="../../../public/css/cursosstyles.css">
     <link rel="stylesheet" href="../../../public/css/templatemo-grad-school.css">
 </head>
+
 <body>
     <header class="main-header clearfix" role="header">
         <div class="logo">
@@ -58,15 +72,11 @@ if ($nomeCurso || $codCoordenacao) {
     <div class="dashboard">
         <h1>Dashboard de Cursos</h1>
 
-        <!-- Formulário de Filtro -->
         <div class="filtro-container">
             <form action="cursos.php" method="POST" class="filtro-form">
-                <!-- Filtro por Nome do Curso -->
                 <input type="text" name="nome_curso" class="filtro-input"
-                    value="<?php echo htmlspecialchars($nomeCurso); ?>"
-                    placeholder="Digite o nome do curso">
+                    value="<?php echo htmlspecialchars($nomeCurso); ?>" placeholder="Digite o nome do curso">
 
-                <!-- Filtro por Coordenação -->
                 <select name="cod_coordenacao" id="cod_coordenacao" class="filtro-select">
                     <option value="">-- Selecione uma Coordenação --</option>
                     <?php foreach ($categoriasCoordenacao as $categoria): ?>
@@ -77,12 +87,10 @@ if ($nomeCurso || $codCoordenacao) {
                     <?php endforeach; ?>
                 </select>
 
-                <!-- Botão de Filtrar -->
                 <button type="submit" class="filtro-button">Filtrar</button>
             </form>
         </div>
 
-        <!-- Exibir as mensagens de erro ou sucesso abaixo do formulário de filtro -->
         <div class="mensagens">
             <?php
             if (isset($_SESSION['error_message'])) {
@@ -97,23 +105,35 @@ if ($nomeCurso || $codCoordenacao) {
             ?>
         </div>
 
-        <!-- Lista de Cursos -->
         <div class="cursos-container">
             <?php if (empty($cursos)): ?>
                 <p>Não há cursos disponíveis no momento.</p>
             <?php else: ?>
                 <?php foreach ($cursos as $curso): ?>
-                    <div class="curso" onclick="abrirMatricula(<?php echo $curso['cod_curso']; ?>)">
+                    <?php
+                    $sql_verificar = "SELECT * FROM cadastro WHERE id = ? AND curso = ?";
+                    $stmt_verificar = $conn->prepare($sql_verificar);
+                    $stmt_verificar->bind_param("ii", $user['id'], $curso['cod_curso']);
+                    $stmt_verificar->execute();
+                    $result_verificar = $stmt_verificar->get_result();
+                    $ja_matriculado = $result_verificar->num_rows > 0;
+                    $desabilitar = $total_matriculas >= 2 || $ja_matriculado;
+                    ?>
+
+                    <div class="curso <?php echo $desabilitar ? 'desabilitado' : ''; ?>"
+                        onclick="<?php echo $desabilitar ? '' : 'abrirMatricula(' . $curso['cod_curso'] . ')'; ?>">
                         <h3><?php echo htmlspecialchars($curso['nome_curso']); ?></h3>
                         <p><strong>Informações:</strong> <?php echo htmlspecialchars($curso['informacoes_curso']); ?></p>
                         <p><strong>Coordenação:</strong> <?php echo htmlspecialchars($curso['nome_coordenacao']); ?></p>
+                        <?php if ($desabilitar): ?>
+                            <p style="color: red;">Indisponível</p>
+                        <?php endif; ?>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
         </div>
     </div>
 
-    <!-- Modal de Matrícula -->
     <div id="modal-matricula" class="modal">
         <div class="modal-conteudo">
             <span class="fechar" onclick="fecharMatricula()">&times;</span>
@@ -151,4 +171,5 @@ if ($nomeCurso || $codCoordenacao) {
         document.getElementById('modal-matricula').style.display = 'none';
     </script>
 </body>
+
 </html>

@@ -20,6 +20,34 @@ $stmt->bind_param("s", $email_aluno);
 $stmt->execute();
 $result = $stmt->get_result();
 
+$sql_check_matriculas = "SELECT COUNT(*) AS total FROM cadastro WHERE id = ? AND curso IS NOT NULL";
+$stmt_check = $conn->prepare($sql_check_matriculas);
+$stmt_check->bind_param("i", $id_cadastro);
+$stmt_check->execute();
+$result_check = $stmt_check->get_result();
+$row_check = $result_check->fetch_assoc();
+$total_cursos = $row_check['total'];
+
+// Impedir matrícula se já tiver 2 cursos
+if ($total_cursos >= 2) {
+    $_SESSION['error_message'] = "Você já está matriculado em 2 cursos. Não é possível adicionar mais.";
+    header("Location: ../../views/aluno/cursos.php");
+    exit;
+}
+
+// Verificar se já está matriculado no mesmo curso
+$sql_check_duplicado = "SELECT * FROM cadastro WHERE id = ? AND curso = ?";
+$stmt_duplicado = $conn->prepare($sql_check_duplicado);
+$stmt_duplicado->bind_param("ii", $id_cadastro, $cod_curso);
+$stmt_duplicado->execute();
+$result_duplicado = $stmt_duplicado->get_result();
+
+if ($result_duplicado->num_rows > 0) {
+    $_SESSION['error_message'] = "Você já está matriculado neste curso.";
+    header("Location: ../../views/aluno/cursos.php");
+    exit;
+}
+
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $id_cadastro = $row['id'];
