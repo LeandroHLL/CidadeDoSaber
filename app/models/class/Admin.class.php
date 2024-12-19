@@ -32,7 +32,7 @@ class Admin{
         if ($result->num_rows > 0) {
             $query = "UPDATE aluno SET inscricao = 1 WHERE cod_aluno = ?";
             $stmt->prepare($query);
-            $stmt->bind_param('i', $codAlunog);
+            $stmt->bind_param('i', $codAluno);
             $stmt->execute();
             Conexao::closeInstance();
             return true;
