@@ -1,11 +1,27 @@
 <?php
+$pdo = new PDO('mysql:host=localhost;dbname=educanet', 'root', '123456cds');
 
-require_once '../../models/class/AdminQuery.php';
-require_once '../../controllers/class/AdminQueryController.php';
+// Consulta SQL para encontrar alunos e cadastros com o mesmo email
+$sql = "
+    SELECT 
+        a.cod_aluno, 
+        a.nome_aluno, 
+        a.email, 
+        a.cpf,         -- Garantir que o campo cpf está sendo buscado da tabela 'aluno'
+        c.username, 
+        c.age, 
+        c.phone_number
+    FROM aluno a
+    INNER JOIN cadastro c ON a.email = c.email
+    WHERE a.email IS NOT NULL AND c.email IS NOT NULL
+";
 
-$controller = new AdminQueryController();
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
 
-$alunos = $controller->getAlunos();
+$alunos = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+
 ?>
 
 <!DOCTYPE html>
@@ -47,7 +63,7 @@ $alunos = $controller->getAlunos();
                 <select id="filter" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
                     <option value="">Filtrar por Status</option>
                     <option value="pendente">Pendente</option>
-                    <option value="concluida">Concluida</option>
+                    <option value="concluida">Concluída</option>
                     <option value="cancelada">Cancelada</option>
                 </select>
             </div>
@@ -62,24 +78,19 @@ $alunos = $controller->getAlunos();
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">ID Matrícula</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Nome Aluno</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Email</th>
-                            <th class="px-4 py-2 text-sm font-medium text-gray-600">Curso</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">CPF</th>
-                            <th class="px-4 py-2 text-sm font-medium text-gray-600">Status</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($alunos as $aluno) : ?>
                             <tr>
-                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['id_matricula']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['nome']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['cod_aluno']) ?></td>
+                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['nome_aluno']) ?></td>
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['email']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['curso_nome']) ?></td>
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['cpf']) ?></td>
-                                <td class="px-4 py-2"><?= htmlspecialchars($aluno['status']) ?></td>
                                 <td class="px-4 py-2">
-                                    <a href="atualizar_status.php?id=<?= $aluno['id_matricula'] ?>&status=ativo" class="text-blue-500 hover:underline">Concluir Cadastro</a>
-                                    <a href="atualizar_status.php?id=<?= $aluno['id_matricula'] ?>&status=inativo" class="text-red-500 hover:underline">Cancelar Cadastro</a>
+                                    <a href="atualizar_status.php?id=<?= $aluno['cod_aluno'] ?>&status=ativo" class="text-green-500 hover:underline">Editar Matriculado</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
