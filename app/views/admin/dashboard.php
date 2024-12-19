@@ -1,10 +1,11 @@
 <?php
-
+session_start(); // Certifique-se de iniciar a sessão
 require_once '../../models/class/AdminQuery.php';
 require_once '../../controllers/class/AdminQueryController.php';
 
 $controller = new AdminQueryController();
 
+// Carregar os alunos
 $alunos = $controller->getAlunos();
 ?>
 
@@ -36,6 +37,22 @@ $alunos = $controller->getAlunos();
     </header>
 
     <main class="flex-1 p-6 overflow-y-auto pt-20">
+        <!-- Exibição de mensagens -->
+        <?php if (!empty($_SESSION['success'])): ?>
+            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
+                <?= htmlspecialchars($_SESSION['success']); ?>
+                <?php unset($_SESSION['success']); ?>
+            </div>
+        <?php endif; ?>
+
+        <?php if (!empty($_SESSION['error'])): ?>
+            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+                <?= htmlspecialchars($_SESSION['error']); ?>
+                <?php unset($_SESSION['error']); ?>
+            </div>
+        <?php endif; ?>
+
+        <!-- Conteúdo principal -->
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-3xl font-bold">Status das Matrículas</h1>
         </div>
@@ -47,7 +64,7 @@ $alunos = $controller->getAlunos();
                 <select id="filter" class="px-4 py-2 border rounded-md focus:outline-none focus:ring focus:ring-blue-300">
                     <option value="">Filtrar por Status</option>
                     <option value="pendente">Pendente</option>
-                    <option value="concluida">Concluida</option>
+                    <option value="concluida">Concluída</option>
                     <option value="cancelada">Cancelada</option>
                 </select>
             </div>
@@ -66,6 +83,7 @@ $alunos = $controller->getAlunos();
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">CPF</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Status</th>
                             <th class="px-4 py-2 text-sm font-medium text-gray-600">Ações</th>
+                            <th class="px-4 py-2 text-sm font-medium text-gray-600">Situação</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,21 +96,32 @@ $alunos = $controller->getAlunos();
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['cpf']) ?></td>
                                 <td class="px-4 py-2"><?= htmlspecialchars($aluno['status']) ?></td>
                                 <td class="px-4 py-2">
-                                    <?php if ($aluno['status'] != 'concluida' && $aluno['status'] != 'cancelada'): ?>
+                                    <?php if ($aluno['status'] != 'concluida' && $aluno['status'] != 'cancelada') : ?>
                                         <a href="concluir.php?id=<?= $aluno['id_matricula'] ?>&nome=<?= urlencode($aluno['nome']) ?>&email=<?= urlencode($aluno['email']) ?>" class="text-blue-500 hover:underline">Concluir Cadastro</a>
-                                        <a href="cancelar.php?id=<?= $aluno['id_matricula'] ?>" class="text-red-500 hover:underline">Cancelar Cadastro</a>
-                                    <?php else: ?>
+                                    <?php else : ?>
                                         <span class="text-gray-500">Ação indisponível</span>
                                     <?php endif; ?>
-
+                                </td>
+                                <td class="px-4 py-2">
+                                    <form action="../../controllers/atualizar_situacao.php" method="post">
+                                        <input type="hidden" name="id_aluno_curso" value="<?= htmlspecialchars($aluno['id_matricula']) ?>">
+                                        <select name="situacao" class="border rounded px-2 py-1 focus:outline-none focus:ring focus:ring-blue-300">
+                                            <option value="pendente" <?= $aluno['status'] === 'pendente' ? 'selected' : '' ?>>Pendente</option>
+                                            <option value="concluida" <?= $aluno['status'] === 'concluida' ? 'selected' : '' ?>>Concluída</option>
+                                            <option value="cancelada" <?= $aluno['status'] === 'cancelada' ? 'selected' : '' ?>>Cancelada</option>
+                                        </select>
+                                        <button type="submit" class="ml-2 bg-blue-500 text-white px-4 py-1 rounded hover:bg-blue-600">
+                                            Atualizar
+                                        </button>
+                                    </form>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
-
                     </tbody>
                 </table>
             </div>
         </div>
+
     </main>
 
     <script>
