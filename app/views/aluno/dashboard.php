@@ -1,13 +1,48 @@
 <?php
 session_start();
 
-// Verifica se o usuário está logado, caso contrário, redireciona para o login
 if (!isset($_SESSION['user'])) {
   header("Location: ../auth/login.php");
   exit;
 }
 
 $user = $_SESSION['user'];
+
+$conn = new mysqli("localhost", "root", "123456cds", "educanet");
+
+if ($conn->connect_error) {
+  die("Erro na conexão: " . $conn->connect_error);
+}
+
+$sql_usuario = "SELECT * FROM cadastro WHERE id = ?";
+$stmt_usuario = $conn->prepare($sql_usuario);
+$stmt_usuario->bind_param("i", $user['id']);
+$stmt_usuario->execute();
+$result_usuario = $stmt_usuario->get_result();
+$usuario = $result_usuario->fetch_assoc();
+
+$sql_cursos = "
+  SELECT c.cod_curso, c.nome_curso, c.informacoes_curso, ac.situacao
+  FROM aluno_curso ac
+  JOIN curso c ON ac.cod_curso = c.cod_curso
+  WHERE ac.id_cadastro = ? AND ac.status = 'ativo'";
+$stmt_cursos = $conn->prepare($sql_cursos);
+$stmt_cursos->bind_param("i", $user['id']);
+$stmt_cursos->execute();
+$result_cursos = $stmt_cursos->get_result();
+
+$curso_pendente = true;
+
+while ($curso = $result_cursos->fetch_assoc()) {
+  if ($curso['situacao'] == 'pendente') {
+    $curso_pendente = true;
+    break;
+  }
+}
+
+$stmt_usuario->close();
+$stmt_cursos->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -20,6 +55,40 @@ $user = $_SESSION['user'];
   <link rel="stylesheet" href="../../../public/css/cursosstyles.css">
   <link rel="stylesheet" href="../../../public/css/perfil.css">
   <link rel="stylesheet" href="../../../public/css/templatemo-grad-school.css">
+
+  <style>
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+      z-index: 1000;
+    }
+
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+    }
+
+    .close-btn {
+      background: red;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+  </style>
 </head>
 
 <body>
@@ -46,34 +115,65 @@ $user = $_SESSION['user'];
       <h2>Informações do Usuário:</h2>
       <p><strong>Nome de Usuário:</strong> <?php echo htmlspecialchars($user['username']); ?></p>
       <p><strong>Email:</strong> <?php echo htmlspecialchars($user['email']); ?></p>
-      <p><strong>ID:</strong> <?php echo htmlspecialchars($user['id']); ?></p>
+      <p><strong>Telefone:</strong> <?php echo htmlspecialchars($usuario['phone_number']); ?></p>
+      <p><strong>Idade:</strong> <?php echo htmlspecialchars($usuario['age']); ?> anos</p>
     </div>
 
     <!-- Meus Cursos -->
     <div class="courses-section">
       <h2>Meus Cursos</h2>
-      <p>Você ainda não está matriculado em nenhum curso.</p>
-      <!-- Exemplo de Cursos -->
-      <table>
-        <thead>
-          <tr>
-            <th>Nome do Curso</th>
-            <th>Status da Matrícula</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Curso de Programação</td>
-            <td>Matrícula Confirmada</td>
-          </tr>
-          <tr>
-            <td>Curso de Design Gráfico</td>
-            <td>Matrícula Pendente</td>
-          </tr>
-        </tbody>
-      </table>
+
+      <?php if ($result_cursos->num_rows > 0): ?>
+        <table>
+          <thead>
+            <tr>
+              <th>Nome do Curso</th>
+              <th>Informações</th>
+              <th>Situação da Matrícula</th>
+            </tr>
+          </thead>
+          <tbody>
+            <?php
+            $result_cursos->data_seek(0);
+            while ($curso = $result_cursos->fetch_assoc()): ?>
+              <tr>
+                <td><?php echo htmlspecialchars($curso['nome_curso']); ?></td>
+                <td><?php echo htmlspecialchars($curso['informacoes_curso']); ?></td>
+                <td class="situacao <?php echo strtolower($curso['situacao']); ?>">
+                  <?php echo htmlspecialchars($curso['situacao']); ?>
+                </td>
+              </tr>
+            <?php endwhile; ?>
+          </tbody>
+        </table>
+      <?php else: ?>
+        <p>Você ainda não está matriculado em nenhum curso.</p>
+      <?php endif; ?>
     </div>
   </div>
+
+  <!-- Popup de matrícula pendente -->
+  <?php if ($curso_pendente): ?>
+    <div class="popup-overlay" id="popup-overlay"></div>
+    <div class="popup" id="popup">
+      <p style="color: red; font-weight: bold;">Você tem uma ou mais matrículas pendentes! Por favor, dirija-se à Cidade do Saber para concluir sua matrícula dentro de 15 dias, ou sua pré-matrícula expirará.</p>
+      <button class="close-btn" onclick="closePopup()">Fechar</button>
+    </div>
+  <?php endif; ?>
+
+  <!-- Script para controlar o pop-up -->
+  <script>
+    function closePopup() {
+      document.getElementById('popup').style.display = 'none';
+      document.getElementById('popup-overlay').style.display = 'none';
+    }
+
+    <?php if ($curso_pendente): ?>
+      document.getElementById('popup').style.display = 'block';
+      document.getElementById('popup-overlay').style.display = 'block';
+    <?php endif; ?>
+  </script>
+
   <div class="col-md-6">
     <div id="map">
       <iframe

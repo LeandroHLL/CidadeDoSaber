@@ -89,3 +89,15 @@ header a {
     margin-bottom: 20px;
   }
 }
+
+.situacao.pendente {
+  color: orange;
+}
+
+.situacao.concluida {
+  color: green;
+}
+
+.situacao.cancelada {
+  color: red;
+}
