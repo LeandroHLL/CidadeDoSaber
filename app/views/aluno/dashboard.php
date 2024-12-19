@@ -177,9 +177,13 @@ $conn->close();
   <div class="col-md-6">
     <div id="map">
       <iframe
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3892.1332990710084!2d-38.323190335180726!3d-12.704721591031344!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x71669d92f55f74f%3A0x495525ae0c09983e!2sPrefeitura%20Municipal%20de%20Cama%C3%A7ari!5e0!3m2!1spt-BR!2sbr!4v1686837556079!5m2!1spt-BR!2sbr"
-        width="100%" height="422px" frameborder="0" style="border:0" allowfullscreen></iframe>
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3892.241992831495!2d-38.32476762492816!3d-12.697622287593143!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x71669d6b50f8b75%3A0x7907c121745628c1!2sCidade%20do%20Saber!5e0!3m2!1spt-BR!2sbr!4v1734586657343!5m2!1spt-BR!2sbr"
+        width="100%" height="422px" frameborder="0" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
     </div>
+  </div>
+
+  </div>
   </div>
 </body>
 
