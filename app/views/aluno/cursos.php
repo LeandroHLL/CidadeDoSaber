@@ -14,7 +14,6 @@ require_once __DIR__ . '/../../models/class/Curso.class.php';
 use app\models\class\Conexao;
 use app\models\class\Curso;
 
-
 $conn = Conexao::openInstance()->connection;
 
 $sql_senhas_disponiveis = "
@@ -56,7 +55,8 @@ if ($nomeCurso || $codCoordenacao) {
     $cursos = $cursoModel->getCursos();
 }
 
-$sql_contagem = "SELECT COUNT(*) AS total FROM cadastro WHERE id = ? AND curso IS NOT NULL";
+// Contagem de matrículas do aluno
+$sql_contagem = "SELECT COUNT(*) AS total FROM aluno_curso WHERE id_cadastro = ?";
 $stmt_contagem = $conn->prepare($sql_contagem);
 $stmt_contagem->bind_param("i", $user['id']);
 $stmt_contagem->execute();
@@ -139,12 +139,15 @@ $total_matriculas = $row_contagem['total'];
                     $curso_nome = $curso['nome_curso'];
                     $total_senhas = $senhas_disponiveis[$curso_nome] ?? 0;
 
-                    $sql_verificar = "SELECT * FROM cadastro WHERE id = ? AND curso = ?";
+                    // Verificar se o aluno já está matriculado neste curso
+                    $sql_verificar = "SELECT * FROM aluno_curso WHERE id_cadastro = ? AND cod_curso = ?";
                     $stmt_verificar = $conn->prepare($sql_verificar);
                     $stmt_verificar->bind_param("ii", $user['id'], $curso['cod_curso']);
                     $stmt_verificar->execute();
                     $result_verificar = $stmt_verificar->get_result();
                     $ja_matriculado = $result_verificar->num_rows > 0;
+
+                    // Desabilitar matrícula se o aluno já tem 2 cursos ou já está matriculado
                     $desabilitar = $total_matriculas >= 2 || $ja_matriculado;
                     ?>
 
@@ -155,7 +158,7 @@ $total_matriculas = $row_contagem['total'];
                         <p><strong>Coordenação:</strong> <?php echo htmlspecialchars($curso['nome_coordenacao']); ?></p>
                         <p><strong>Vagas disponíveis:</strong> <?php echo $total_senhas; ?></p>
                         <?php if ($desabilitar): ?>
-                            <p style="color: red;">Já cadastrado</p>
+                            <p style="color: red;">Já cadastrado ou limite de cursos atingido</p>
                         <?php endif; ?>
                         <?php if ($total_senhas == 0): ?>
                             <p style="color: gray;">Sem vagas disponíveis</p>

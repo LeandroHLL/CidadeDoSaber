@@ -20,37 +20,38 @@ $stmt->bind_param("s", $email_aluno);
 $stmt->execute();
 $result = $stmt->get_result();
 
-$sql_check_matriculas = "SELECT COUNT(*) AS total FROM cadastro WHERE id = ? AND curso IS NOT NULL";
-$stmt_check = $conn->prepare($sql_check_matriculas);
-$stmt_check->bind_param("i", $id_cadastro);
-$stmt_check->execute();
-$result_check = $stmt_check->get_result();
-$row_check = $result_check->fetch_assoc();
-$total_cursos = $row_check['total'];
-
-// Impedir matrícula se já tiver 2 cursos
-if ($total_cursos >= 2) {
-    $_SESSION['error_message'] = "Você já está matriculado em 2 cursos. Não é possível adicionar mais.";
-    header("Location: ../../views/aluno/cursos.php");
-    exit;
-}
-
-// Verificar se já está matriculado no mesmo curso
-$sql_check_duplicado = "SELECT * FROM cadastro WHERE id = ? AND curso = ?";
-$stmt_duplicado = $conn->prepare($sql_check_duplicado);
-$stmt_duplicado->bind_param("ii", $id_cadastro, $cod_curso);
-$stmt_duplicado->execute();
-$result_duplicado = $stmt_duplicado->get_result();
-
-if ($result_duplicado->num_rows > 0) {
-    $_SESSION['error_message'] = "Você já está matriculado neste curso.";
-    header("Location: ../../views/aluno/cursos.php");
-    exit;
-}
-
 if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $id_cadastro = $row['id'];
+
+    // Verificar o número de cursos matriculados
+    $sql_check_matriculas = "SELECT COUNT(*) AS total FROM aluno_curso WHERE id_cadastro = ?";
+    $stmt_check = $conn->prepare($sql_check_matriculas);
+    $stmt_check->bind_param("i", $id_cadastro);
+    $stmt_check->execute();
+    $result_check = $stmt_check->get_result();
+    $row_check = $result_check->fetch_assoc();
+    $total_cursos = $row_check['total'];
+
+    // Impedir matrícula se já tiver 2 cursos
+    if ($total_cursos >= 2) {
+        $_SESSION['error_message'] = "Você já está matriculado em 2 cursos. Não é possível adicionar mais.";
+        header("Location: ../../views/aluno/cursos.php");
+        exit;
+    }
+
+    // Verificar se já está matriculado no mesmo curso
+    $sql_check_duplicado = "SELECT * FROM aluno_curso WHERE id_cadastro = ? AND cod_curso = ?";
+    $stmt_duplicado = $conn->prepare($sql_check_duplicado);
+    $stmt_duplicado->bind_param("ii", $id_cadastro, $cod_curso);
+    $stmt_duplicado->execute();
+    $result_duplicado = $stmt_duplicado->get_result();
+
+    if ($result_duplicado->num_rows > 0) {
+        $_SESSION['error_message'] = "Você já está matriculado neste curso.";
+        header("Location: ../../views/aluno/cursos.php");
+        exit;
+    }
 
     // Buscar uma senha disponível com base na lógica de junção
     $sql_find_senha = "
@@ -75,11 +76,13 @@ if ($result->num_rows > 0) {
         $cod_senha = $row_senha['cod_senha'];
         $autenticacao = $row_senha['autenticacao'];
 
-        // Atualizar a tabela cadastro com o código do curso e a autenticação da senha
-        $sql_update_cadastro = "UPDATE cadastro SET curso = ?, autenticacao = ? WHERE id = ?";
-        $stmt_update = $conn->prepare($sql_update_cadastro);
-        $stmt_update->bind_param("isi", $cod_curso, $autenticacao, $id_cadastro);
-        $stmt_update->execute();
+        // Inserir a matrícula na tabela aluno_curso (agora com o id_cadastro)
+        $sql_insert_matricula = "
+        INSERT INTO aluno_curso (id_cadastro, cod_curso, data_matricula, status, informacoes)
+        VALUES (?, ?, CURDATE(), 'ativo', ?)";
+        $stmt_insert = $conn->prepare($sql_insert_matricula);
+        $stmt_insert->bind_param("iis", $id_cadastro, $cod_curso, $autenticacao);
+        $stmt_insert->execute();
 
         // Atualizar o status da senha para "PENDENTE"
         $sql_update_senha = "UPDATE senha SET situacao = 'PENDENTE' WHERE cod_senha = ?";
